@@ -1,22 +1,30 @@
 .app-shell {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
   width: 100%;
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow: hidden;
   position: relative;
 }
 
 .sidebar {
   flex-shrink: 0;
   width: 72px;
+  height: 100vh;
+  max-height: 100vh;
+  position: sticky;
+  top: 0;
   background-color: var(--green-dark);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 18px 0;
   transition: width 0.25s ease;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+  box-sizing: border-box;
 }
 
 .sidebar.expanded {
@@ -208,9 +216,12 @@
   min-width: 0;
   width: 100%;
   max-width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   background: linear-gradient(180deg, var(--cream-top) 0%, var(--cream-bottom) 55%);
-  min-height: 100vh;
   box-sizing: border-box;
 }
 
