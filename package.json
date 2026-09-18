@@ -1,0 +1,16 @@
+{
+  "name": "laanbayan",
+  "version": "1.0.0",
+  "description": "Barangay appointment and service availability system to cut down on walk-in queues and schedule transactions.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'Static site ready'",
+    "lint": "node --check server.js js/script.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

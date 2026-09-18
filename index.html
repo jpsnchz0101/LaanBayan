@@ -4,10 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LaanBayan — Iwas Pila, Para sa Bawat Isa</title>
+<meta name="description" content="Barangay appointment and service availability system to cut down on walk-in queues and schedule transactions.">
+<meta property="og:title" content="LaanBayan — Iwas Pila, Para sa Bawat Isa">
+<meta property="og:description" content="Barangay appointment and service availability system to cut down on walk-in queues and schedule transactions.">
 <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kavivanar&family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/landing.css">
 </head>
@@ -25,6 +28,7 @@
         <li><a href="#home">Home</a></li>
         <li><a href="#about">Purpose</a></li>
         <li><a href="#services">Services</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
     </nav>
   </div>
@@ -41,33 +45,86 @@
       </div>
     </div>
 
-    <div class="login-panel">
-      <h2 class="login-title">LOGIN</h2>
-      <div class="login-card">
-        <p class="form-error" id="formError" role="alert" hidden>Invalid ID number or password. Please try again.</p>
-        <form id="loginForm" novalidate>
-          <div class="field">
-            <label for="brgy-id">Barangay ID Number</label>
-            <div class="input-wrap"><input id="brgy-id" name="brgy-id" type="text" placeholder="NUMBER" required autocomplete="off"></div>
-          </div>
-          <div class="field">
-            <label for="password">Password</label>
-            <div class="input-wrap">
-              <input id="password" name="password" type="password" placeholder="PASSWORD" required autocomplete="current-password">
-              <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password">
-                <img src="assets/icons/eye.svg" width="18" height="18" alt="Toggle Password">
-              </button>
-            </div>
-          </div>
-          <div class="row-between">
-            <label class="remember"><input type="checkbox" name="remember"> Remember me</label>
-            <a href="#" class="forgot">Forgot Password?</a>
-          </div>
-          <button type="submit" class="btn-proceed">Proceed</button>
-        </form>
+    <div class="resident-login-card">
+      <!-- Brand header matching navbar logo -->
+      <div class="resident-card-brand">
+        <svg class="resident-logo-icon" width="22" height="21" viewBox="0 0 64 61" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M29.1334 53.5656V33.3937C26.5045 33.309 23.9976 32.7631 21.6128 31.7562C19.2283 30.7493 17.0959 29.3497 15.2154 27.5574C13.2492 25.6833 11.7483 23.5195 10.7128 21.066C9.6772 18.6128 9.15942 16.0714 9.15942 13.4416V8.80306H14.0261C16.7612 8.80306 19.4094 9.31224 21.9708 10.3306C24.5325 11.349 26.7901 12.7933 28.7434 14.6635C29.9608 15.8238 31.0163 17.1395 31.9101 18.6107C32.8043 20.0819 33.4668 21.6126 33.8974 23.2029C34.0743 22.8873 34.2732 22.5916 34.4941 22.3158C34.715 22.0401 34.947 21.7865 35.1901 21.5552C37.1536 19.685 39.423 18.2407 41.9981 17.2223C44.5728 16.204 47.2401 15.6948 50.0001 15.6948H54.8668V20.3333C54.8668 22.9839 54.3332 25.5308 53.2661 27.9742C52.199 30.4176 50.6819 32.577 48.7148 34.4523C46.8365 36.2425 44.7163 37.6304 42.3541 38.6162C39.9914 39.6019 37.4956 40.1372 34.8668 40.2219V53.5656H29.1334ZM29.2261 27.8656C29.2261 26.3829 28.8261 24.7944 28.0261 23.0999C27.2261 21.4055 26.115 19.8805 24.6928 18.5249C23.4039 17.2965 21.9039 16.3116 20.1928 15.5702C18.4816 14.8289 16.715 14.3947 14.8928 14.2676C14.9816 16.0468 15.4039 17.7413 16.1594 19.351C16.915 20.9607 17.9594 22.401 19.2928 23.6718C20.6261 24.9426 22.1483 25.9381 23.8594 26.6583C25.5705 27.3784 27.3594 27.7808 29.2261 27.8656ZM34.8668 34.7573C36.4223 34.7573 38.089 34.3972 39.8668 33.6771C41.6445 32.9569 43.2445 31.9191 44.6668 30.5635C46.0001 29.2927 47.0556 27.8524 47.8334 26.2427C48.6112 24.633 49.0445 22.9385 49.1334 21.1594C47.2668 21.2441 45.489 21.6571 43.8001 22.3984C42.1112 23.1398 40.6001 24.1458 39.2668 25.4167C37.9334 26.6875 36.889 28.1172 36.1334 29.7057C35.3779 31.2943 34.9556 32.9781 34.8668 34.7573Z" fill="#244b31"/>
+        </svg>
+        <span class="resident-brand-wordmark"><span class="laan">Laan</span><span class="bayan">Bayan</span></span>
       </div>
-      <div class="register-line">New user? <a href="registration.html" class="register-link">Register here</a></div>
+
+      <h2 class="resident-card-title">Resident Login</h2>
+      <p class="resident-card-subtitle">Access your appointments &amp; documents.</p>
+
+      <!-- Error alert shown when credentials fail -->
+      <div class="resident-login-error" id="formError" role="alert" style="display: none;">Invalid ID number or password. Please try again.</div>
+
+      <form id="loginForm" novalidate>
+        <div class="resident-field-group">
+          <label for="brgy-id" class="resident-field-label">Contact Number or Resident Name</label>
+          <input
+            id="brgy-id"
+            name="brgy-id"
+            type="text"
+            class="resident-field-input"
+            placeholder="e.g. 09171234567 or Juan Dela Cruz"
+            required
+            autocomplete="username"
+          >
+        </div>
+
+        <div class="resident-field-group">
+          <label for="password" class="resident-field-label">Password</label>
+          <div class="resident-password-wrap">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="resident-field-input"
+              placeholder="Enter your password"
+              required
+              autocomplete="current-password"
+            >
+            <button type="button" class="resident-toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="resident-row-between">
+          <label class="resident-remember">
+            <input type="checkbox" name="remember">
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="resident-forgot">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-resident-login-action" id="btnProceedLogin">
+          Login
+        </button>
+
+        <div class="resident-login-bottom">
+          <span>New resident?</span>
+          <a href="registration.html" class="link-resident-register">Register here</a>
+        </div>
+      </form>
     </div>
+  </div>
+
+  <!-- Downward arrow indicator prompting users to explore below -->
+  <div class="scroll-down-container">
+    <a href="#about" class="scroll-down-btn" id="scrollDownBtn" aria-label="Explore barangay services and purpose">
+      <span class="scroll-text">Explore LaanBayan</span>
+      <div class="scroll-arrow-circle" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </a>
   </div>
 </div>
 
@@ -80,83 +137,257 @@
       <div class="about-grid">
         <div>
           <h3>Mission &amp; Purpose</h3>
-          <p>Laan Bayan is a barangay appointment and service availability system built to cut down on wasted trips and long walk-in lines. Residents can check what services are open, book a time slot, and track their place in the queue from anywhere — no more guessing whether the office is even open today.</p>
+          <p>Laan Bayan is a barangay appointment and service availability system built to cut down on wasted trips and long walk-in lines. Residents can check what services are open, book a time slot, and track their place in the queue from anywhere &mdash; no more guessing whether the office is even open today.</p>
           <h3>What we're solving</h3>
           <p>Long unplanned queues at the barangay hall, unclear service hours, and no way to know ahead of time whether a request can even be processed that day.</p>
         </div>
-        <img class="about-img" src="png/barangay-seal.png" alt="Barangay Ugac No seal">
+        <img class="about-img" src="assets/png/ugac.png" alt="Barangay Ugac No seal">
       </div>
     </div>
   </section>
 
   <section class="services-section" id="services">
-    <div class="services">
+    <div class="services-wrapper">
       <div class="services-head">
-        <h2>Services</h2>
-        <p>Attached are the requirements needed for each service</p>
+        <div class="services-head-text">
+          <h2>Services</h2>
+          <p>Attached are the requirements needed for each service</p>
+        </div>
+        <div class="services-direction-indicator">
+          <span>Hover the card to pause</span>
+        </div>
       </div>
 
-      <div class="service-grid">
+      <div class="services-marquee-wrapper" id="servicesMarqueeWrapper">
+        <div class="services-marquee-track">
 
-        <div class="svc-card">
-          <span class="svc-badge"></span>
-          <div class="svc-name">Barangay Clearance</div>
-          <div class="svc-time">15 mins</div>
-          <div class="svc-chips">
-            <span class="chip">Valid ID</span>
-            <span class="chip">Proof of Residency</span>
-            <span class="chip">2x2 Picture</span>
+          <!-- Service cards set A -->
+          <div class="svc-card">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Certificate of Residency</div>
+            <div class="svc-time">10 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Proof of Residency</span>
+              <span class="chip">Purok Certification</span>
+            </div>
+          </div>
+
+          <div class="svc-card">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Barangay Clearance</div>
+            <div class="svc-time">15 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Proof of Residency</span>
+              <span class="chip">2x2 Picture</span>
+            </div>
+          </div>
+
+          <div class="svc-card">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Certificate of Indigency</div>
+            <div class="svc-time">20 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Proof of Residency</span>
+              <span class="chip">Sworn Affidavit</span>
+            </div>
+          </div>
+
+          <div class="svc-card">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Certificate of Low-Income</div>
+            <div class="svc-time">15 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Proof of Income / ITR</span>
+              <span class="chip">Proof of Residency</span>
+            </div>
+          </div>
+
+          <div class="svc-card">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Business Clearance</div>
+            <div class="svc-time">25 mins</div>
+            <div class="svc-chips">
+              <span class="chip">DTI/SEC Certificate</span>
+              <span class="chip">Valid ID</span>
+              <span class="chip">Lease Contract or Title</span>
+            </div>
+          </div>
+
+          <div class="svc-card">
+            <span class="svc-badge"></span>
+            <div class="svc-name">First Time Job Seeker Certificate</div>
+            <div class="svc-time">15 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID / School ID</span>
+              <span class="chip">Oath of Undertaking</span>
+              <span class="chip">Barangay Endorsement (RA 11261)</span>
+            </div>
+          </div>
+
+          <div class="svc-card">
+            <span class="svc-badge active"></span>
+            <div class="svc-name">Others</div>
+            <div class="svc-time">15-30 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Transaction Details</span>
+              <span class="chip">Supporting Documents</span>
+            </div>
+          </div>
+
+          <!-- Service cards set B (duplicate for seamless infinite rightward auto-loop) -->
+          <div class="svc-card" aria-hidden="true">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Certificate of Residency</div>
+            <div class="svc-time">10 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Proof of Residency</span>
+              <span class="chip">Purok Certification</span>
+            </div>
+          </div>
+
+          <div class="svc-card" aria-hidden="true">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Barangay Clearance</div>
+            <div class="svc-time">15 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Proof of Residency</span>
+              <span class="chip">2x2 Picture</span>
+            </div>
+          </div>
+
+          <div class="svc-card" aria-hidden="true">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Certificate of Indigency</div>
+            <div class="svc-time">20 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Proof of Residency</span>
+              <span class="chip">Sworn Affidavit</span>
+            </div>
+          </div>
+
+          <div class="svc-card" aria-hidden="true">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Certificate of Low-Income</div>
+            <div class="svc-time">15 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Proof of Income / ITR</span>
+              <span class="chip">Proof of Residency</span>
+            </div>
+          </div>
+
+          <div class="svc-card" aria-hidden="true">
+            <span class="svc-badge"></span>
+            <div class="svc-name">Business Clearance</div>
+            <div class="svc-time">25 mins</div>
+            <div class="svc-chips">
+              <span class="chip">DTI/SEC Certificate</span>
+              <span class="chip">Valid ID</span>
+              <span class="chip">Lease Contract or Title</span>
+            </div>
+          </div>
+
+          <div class="svc-card" aria-hidden="true">
+            <span class="svc-badge"></span>
+            <div class="svc-name">First Time Job Seeker Certificate</div>
+            <div class="svc-time">15 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID / School ID</span>
+              <span class="chip">Oath of Undertaking</span>
+              <span class="chip">Barangay Endorsement (RA 11261)</span>
+            </div>
+          </div>
+
+          <div class="svc-card" aria-hidden="true">
+            <span class="svc-badge active"></span>
+            <div class="svc-name">Others</div>
+            <div class="svc-time">15-30 mins</div>
+            <div class="svc-chips">
+              <span class="chip">Valid ID</span>
+              <span class="chip">Transaction Details</span>
+              <span class="chip">Supporting Documents</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frequently Asked Questions section -->
+  <section class="faq-section" id="faq">
+    <div class="faq-container">
+      <div class="section-badge">Help &amp; Guidance</div>
+      <h2 class="faq-heading">Frequently Asked Questions</h2>
+      <p class="faq-sub">Everything you need to know about online barangay appointments, document processing, and queue policies.</p>
+
+      <div class="faq-accordion" id="faqAccordion">
+        
+        <div class="faq-item active">
+          <button type="button" class="faq-question" aria-expanded="true">
+            <span>How do I book an appointment or request a barangay document?</span>
+            <span class="faq-toggle-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Log in with your contact number or resident name using the portal. Once logged in, select your requested service (e.g., Barangay Clearance or Certificate of Residency), check the list of requirements, choose your preferred date and time slot (morning or afternoon), and click confirm. You will receive an instant digital appointment pass with your queue number.</p>
           </div>
         </div>
 
-        <div class="svc-card">
-          <span class="svc-badge"></span>
-          <div class="svc-name">Certificate of Indigency</div>
-          <div class="svc-time">20 mins</div>
-          <div class="svc-chips">
-            <span class="chip">Valid ID</span>
-            <span class="chip">Proof of Residency</span>
-            <span class="chip">Sworn Affidavit</span>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false">
+            <span>Can I still walk in to the barangay hall without an online reservation?</span>
+            <span class="faq-toggle-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, walk-ins are always welcomed at Barangay Ugac Sur. However, online appointments are given dedicated queue priority slots. Booking online ensures you have all required documents beforehand and prevents long waiting times at the hall.</p>
           </div>
         </div>
 
-        <div class="svc-card">
-          <span class="svc-badge"></span>
-          <div class="svc-name">Business Permit Endorsement</div>
-          <div class="svc-time">30 mins</div>
-          <div class="svc-chips">
-            <span class="chip">DTI/SEC Certificate</span>
-            <span class="chip">Valid ID</span>
-            <span class="chip">Lease Contract or Title</span>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false">
+            <span>Are any barangay documents issued free of charge?</span>
+            <span class="faq-toggle-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! In accordance with Republic Act No. 11261 (First Time Jobseekers Assistance Act), all clearances, certificates, and endorsements issued to first-time jobseekers are 100% free of charge. Simply bring your Barangay Certification of First-Time Jobseeker and valid ID/school ID.</p>
           </div>
         </div>
 
-        <div class="svc-card">
-          <span class="svc-badge"></span>
-          <div class="svc-name">Barangay ID</div>
-          <div class="svc-time">10 mins</div>
-          <div class="svc-chips">
-            <span class="chip">PSA Birth Certificate</span>
-            <span class="chip">2x2 Picture</span>
-            <span class="chip">Proof of Residency</span>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false">
+            <span>How will I know when my queue number is called?</span>
+            <span class="faq-toggle-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <p>You can monitor live queue movement right from your phone through the resident dashboard. In addition, the barangay hall displays the current serving number on the digital queue monitor at Desk 01 and Desk 02.</p>
           </div>
         </div>
 
-        <div class="svc-card">
-          <span class="svc-badge"></span>
-          <div class="svc-name">Cedula</div>
-          <div class="svc-time">15 mins</div>
-          <div class="svc-chips">
-            <span class="chip">Valid ID</span>
-            <span class="chip">Previous Year Cedula <small>(if applicable)</small></span>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false">
+            <span>What happens if I arrive late for my scheduled slot?</span>
+            <span class="faq-toggle-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Appointments include a 15-minute grace period. If you arrive past your time slot, your pass will remain active in the priority standby pool, and the frontline officer will attend to you during the next open window.</p>
           </div>
         </div>
 
-        <div class="svc-card">
-          <span class="svc-badge active"></span>
-          <div class="svc-name">Health Services &amp; Barangay Announcements</div>
-          <div class="svc-chips">
-            <span class="chip">Up to date announcements</span>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false">
+            <span>What should I bring during my appointment date?</span>
+            <span class="faq-toggle-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Please bring at least one valid government-issued ID (or student ID for minors/students), proof of residency (such as utility bills or lease agreements), and any service-specific documents listed under our Services section.</p>
           </div>
         </div>
 
@@ -169,6 +400,16 @@
       <div class="footer-brand">
         <p><strong>LaanBayan</strong></p>
         <p class="url"><a href="#"><span>www.</span>LaanBayan.com</a></p>
+      </div>
+
+      <div class="footer-nav">
+        <h4>QUICK LINKS:</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">Purpose</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
       </div>
 
       <div class="footer-contact">
@@ -192,7 +433,12 @@
         <span class="wordmark"><span class="laan">Laan</span><span class="bayan">Bayan</span></span>
       </div>
     </div>
-    <p class="copyright">© 2026 Laan Bayan</p>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:14px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+      <p class="copyright" style="margin:0;">© 2026 Laan Bayan &bull; All Rights Reserved</p>
+      <a href="admin_login.html" id="linkToAdminLogin" style="font-size:12px; color:var(--gold); text-decoration:none; display:inline-flex; align-items:center; gap:6px; opacity:0.85;">
+        <span>Barangay Official / Admin Portal &rarr;</span>
+      </a>
+    </div>
   </footer>
 
 </div>

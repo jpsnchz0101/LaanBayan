@@ -6,7 +6,8 @@
 <title>LaanBayan — Dashboard</title>
 <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Kavivanar&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="css/queue.css">
@@ -15,12 +16,15 @@
 
 <div class="app-shell">
 
+  <!-- Mobile backdrop overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
   <aside class="sidebar expanded" id="sidebar">
 
     <div class="sidebar-top">
       <div class="sidebar-brand">
         <img class="logo-icon" src="assets/icons/favuser.svg" width="26" height="26" alt="LaanBayan Logo">
-        <span class="sidebar-brand-text">Laan<span class="bayan">Bayan</span></span>
+        <span class="sidebar-brand-text"><span class="laan">Laan</span><span class="bayan">Bayan</span></span>
       </div>
 
       <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" aria-expanded="true">
@@ -66,12 +70,31 @@
   </aside>
 
   <main class="dash-main" id="dashMain">
+
+    <!-- Mobile Top Navigation Bar -->
+    <div class="dash-mobile-topbar" id="dashMobileTopbar">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="mobile-brand">
+        <img class="logo-icon" src="assets/icons/favuser.svg" width="22" height="22" alt="LaanBayan Logo">
+        <span class="mobile-brand-text"><span class="laan">Laan</span><span class="bayan">Bayan</span></span>
+      </div>
+      <div class="mobile-user-avatar">
+        <span class="mobile-user-initial" id="mobileUserInitial">J</span>
+      </div>
+    </div>
+
     <div class="dash-content">
 
       <section class="dash-section active" data-section="dashboard">
   <header class="dash-header">
     <div class="dash-heading">
-      <h1 class="dash-greeting">Maganda-araw, <span class="dash-username">Juan</span>!</h1>
+      <h1 class="dash-greeting">Magandang-araw, <span class="dash-username">Juan</span>!</h1>
       <p class="dash-subtitle">Here, you can schedule your appointments and view announcements by the Barangay.</p>
     </div>
     <time class="dash-clock" id="dashClock"></time>
@@ -80,77 +103,105 @@
   <div class="dash-panels">
 
     <section class="dash-panel dash-announcements">
-  <h2 class="dash-panel-title">Announcements</h2>
+      <h2 class="dash-panel-title">Announcements</h2>
+      <div id="userAnnouncementsList">
+        <button type="button" class="announcement-card is-open">
+          <p class="announcement-text">Community Clean-Up Drive — July 20, 2026</p>
+          <div class="announcement-divider"></div>
+          <p class="announcement-blurb">Meet at the barangay hall covered court at 6:00 AM. Bring gloves and a reusable water bottle — purok leaders will assign areas on-site.</p>
+        </button>
 
-  <button type="button" class="announcement-card">
-    <p class="announcement-text">Community Clean-Up Drive — July 20, 2026</p>
-    <div class="announcement-divider"></div>
-    <p class="announcement-blurb">Meet at the barangay hall covered court at 6:00 AM. Bring gloves and a reusable water bottle — purok leaders will assign areas on-site.</p>
-  </button>
-
-  <button type="button" class="announcement-card">
-    <p class="announcement-text">New Office Hours Effective August 1, 2026</p>
-    <div class="announcement-divider"></div>
-    <p class="announcement-blurb">If this is your first time with us, no worries! Just follow the directions below and you're good to go!</p>
-  </button>
-</section>
+        <button type="button" class="announcement-card">
+          <p class="announcement-text">Social Pension Payout</p>
+          <div class="announcement-divider"></div>
+          <p class="announcement-blurb">For Senior Citizens (September 2026 @ 10 AM) Venue: Reyes Gym. Please present valid senior ID.</p>
+        </button>
+      </div>
+    </section>
 
     <section class="dash-panel dash-services">
-      <h2 class="dash-panel-title">Services & Status</h2>
-
-      <div class="service-row">
-        <span class="service-row-name">Barangay Clearance</span>
-        <span class="status-pill status-pill--unavailable">unavailable</span>
-      </div>
-      <div class="service-row">
-        <span class="service-row-name">Cedula</span>
-        <span class="status-pill status-pill--available">available</span>
-      </div>
-      <div class="service-row">
-        <span class="service-row-name">Certificate of Indigency</span>
-        <span class="status-pill status-pill--available">available</span>
-      </div>
-      <div class="service-row">
-        <span class="service-row-name">Business Permit Endorsement</span>
-        <span class="status-pill status-pill--unavailable">unavailable</span>
-      </div>
-      <div class="service-row">
-        <span class="service-row-name">Barangay ID</span>
-        <span class="status-pill status-pill--available">available</span>
+      <h2 class="dash-panel-title">Services &amp; Status</h2>
+      <div id="userServicesList" style="display:flex; flex-direction:column; gap:12px;">
+        <!-- Service cards rendered dynamically from script.js -->
       </div>
     </section>
 
     <section class="dash-panel dash-booking">
       <h2 class="dash-panel-title">Book an appointment now</h2>
-      <p class="dash-booking-intro">If this is your first time with us, no worries! Just follow the directions below and you're good to go!</p>
+      <p class="dash-booking-intro">Easily reserve your slot in just a few taps. Fast, hassle-free barangay transaction!</p>
 
-      <ol class="dash-booking-steps">
-        <li>Choose a service – Select a barangay service you need (e.g., clearance, indigency certificate, business permit).</li>
-        <li>Pick a date – Choose your preferred appointment date from the available slots.</li>
-        <li>Specify details (if Others) – If your service falls under "Others," type in a short description of what you need.</li>
-        <li>Confirm and submit – Review your selections and tap Book Appointment to get your queue number.</li>
-      </ol>
+      <!-- Verified resident badge showing loaded profile data -->
+      <div class="booking-verified-card" id="residentDetailsBox">
+        <div class="verified-badge-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+        </div>
+        <div class="verified-badge-body">
+          <div class="verified-badge-top">
+            <span class="verified-badge-pill">Verified Resident</span>
+            <strong class="verified-badge-name" id="previewResidentName">Juan Dela Cruz</strong>
+            <span class="verified-badge-meta">(<span id="previewResidentAge">31</span> yrs old)</span>
+          </div>
+          <div class="verified-badge-details">
+            <span id="previewResidentAddress">Purok 4, Barangay Ugac</span> · <span id="previewResidentZone">Zone 3</span>, <span id="previewResidentStreet">Luna St.</span> · <span id="previewResidentContact">09171234567</span>
+          </div>
+        </div>
+      </div>
 
       <form class="booking-form" id="bookingForm">
-        <div class="booking-form-row">
+
+        <!-- Service selection -->
+        <div class="booking-form-group">
+          <label class="booking-label" for="serviceSelect">Choose Service</label>
           <select class="booking-select" id="serviceSelect" required>
             <option value="" disabled selected>Pumili ng serbisyo</option>
+            <option value="residency">Certificate of Residency</option>
             <option value="clearance">Barangay Clearance</option>
-            <option value="cedula">Cedula</option>
             <option value="indigency">Certificate of Indigency</option>
-            <option value="permit">Business Permit Endorsement</option>
-            <option value="id">Barangay ID</option>
+            <option value="low_income">Certificate of Low-Income</option>
+            <option value="business_clearance">Business Clearance</option>
+            <option value="job_seeker">First Time Job Seeker Certificate</option>
             <option value="others">Others</option>
-          </select>
-
-          <select class="booking-select booking-select--date" id="dateSelect" required>
-            <option value="" disabled selected>Petsa</option>
           </select>
         </div>
 
-        <input type="text" class="booking-input" id="othersInput" placeholder="If others, please specify">
+        <input type="text" class="booking-input" id="othersInput" placeholder="Specify document / service needed" style="display:none;">
 
-        <button type="submit" class="btn-submit">I-submit</button>
+        <!-- Date picker and time slot selection -->
+        <div class="booking-form-group">
+          <label class="booking-label" for="dateSelect">Appointment Date</label>
+          <select class="booking-select" id="dateSelect" required>
+            <option value="" disabled selected>Pumili ng Petsa</option>
+          </select>
+        </div>
+
+        <div class="booking-form-group">
+          <label class="booking-label">Preferred Time Slot</label>
+          <div class="time-slot-grid">
+            <button type="button" class="time-slot-btn active" data-slot="Morning (8:00 AM - 11:30 AM)">
+              Morning (8:00 AM – 11:30 AM)
+            </button>
+            <button type="button" class="time-slot-btn" data-slot="Afternoon (1:00 PM - 4:30 PM)">
+              Afternoon (1:00 PM – 4:30 PM)
+            </button>
+          </div>
+          <input type="hidden" id="selectedTimeSlot" value="Morning (8:00 AM - 11:30 AM)">
+        </div>
+
+        <!-- Appointment purpose field -->
+        <div class="booking-form-group">
+          <label class="booking-label" for="appointmentPurpose">Purpose of Appointment</label>
+          <input type="text" class="booking-input" id="appointmentPurpose" placeholder="e.g. Scholarship requirement, Job application, Bank account" required>
+        </div>
+
+        <!-- Document requirements preview -->
+        <div class="requirements-preview-box" id="requirementsPreviewBox">
+          <span class="req-title">Requirements to bring:</span>
+          <span id="requirementsListText">Valid ID, Proof of Residency, 2x2 Photo</span>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnBookAppointment">Confirm &amp; Book Appointment</button>
       </form>
     </section>
 
@@ -170,7 +221,7 @@
 
     <section class="dash-panel queue-active-panel">
       <div class="queue-active-list" id="queueActiveList">
-        <!-- queue cards rendered by renderActiveQueue() in script.js -->
+        <!-- Live queue cards populated by renderActiveQueue() in script.js -->
       </div>
     </section>
 
@@ -186,7 +237,7 @@
             </tr>
           </thead>
           <tbody id="queueHistoryBody">
-            <!-- rows rendered by renderQueueHistory() in script.js -->
+            <!-- Appointment history rows populated by renderQueueHistory() in script.js -->
           </tbody>
         </table>
       </div>
@@ -201,8 +252,94 @@
             <h1 class="dash-greeting">About</h1>
             <p class="dash-subtitle">Learn more about LaanBayan and how to reach us.</p>
           </div>
+          <time class="dash-clock" id="dashClockAbout"></time>
         </header>
-        <!-- mission/purpose, barangay contact details, office hours go here -->
+
+        <div class="dash-panels dash-about-panels">
+          <section class="dash-panel">
+            <h2 class="dash-panel-title">Mission &amp; Purpose</h2>
+            <p style="font-size: 15px; line-height: 1.6; color: var(--text-gray); margin-bottom: 16px;">
+              Laan Bayan is a barangay appointment and service availability system built to cut down on wasted trips and long walk-in lines. Residents can check what services are open, book a time slot, and track their place in the queue from anywhere — no more guessing whether the office is even open today.
+            </p>
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--dash-green); margin-bottom: 8px;">What We're Solving</h3>
+            <p style="font-size: 15px; line-height: 1.6; color: var(--text-gray);">
+              Long unplanned queues at the barangay hall, unclear service hours, and no way to know ahead of time whether a request can even be processed that day.
+            </p>
+          </section>
+
+          <section class="dash-panel">
+            <h2 class="dash-panel-title">Barangay Information</h2>
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 14px; color: var(--text-gray);">
+              <div>
+                <strong style="color: var(--text-dark); display: block;">Office Hours:</strong>
+                Monday to Saturday — 8:00 AM to 5:00 PM (Closed on Sundays and National Holidays)
+              </div>
+              <div>
+                <strong style="color: var(--text-dark); display: block;">Contact Details:</strong>
+                Email: laanbayan@gmail.com<br>
+                Mobile No.: (+63) 912 345 6789<br>
+                Facebook: facebook.com/LaanBayan
+              </div>
+              <div>
+                <strong style="color: var(--text-dark); display: block;">Location:</strong>
+                Barangay Ugac Hall
+              </div>
+            </div>
+          </section>
+
+          <!-- Problem report form for resident issues -->
+          <section class="report-problem-card">
+            <h2 class="dash-panel-title">Report a Problem</h2>
+            <p style="font-size: 14px; color: var(--text-gray); margin-bottom: 8px;">
+              Encountered an issue with our queue, a requested document, or barangay frontline service? Let us know so our administration can take immediate corrective action.
+            </p>
+
+            <form id="reportProblemForm" class="report-form">
+              <div class="report-form-grid">
+                <div>
+                  <label class="booking-label" for="problemCategory">Category</label>
+                  <select id="problemCategory" class="report-select" required>
+                    <option value="" disabled selected>Pumili ng kategorya</option>
+                    <option value="Queue & Waiting Time">Queue &amp; Waiting Time Issue</option>
+                    <option value="Document Requirements Error">Document or Information Error</option>
+                    <option value="Facility & Cleanliness">Facility / Barangay Hall Issue</option>
+                    <option value="Staff Assistance">Staff or Officer Assistance</option>
+                    <option value="Portal / System Technical Bug">LaanBayan System / Website Bug</option>
+                    <option value="Other Concerns">Other Concerns</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="booking-label" for="problemSubject">Subject / Brief Summary</label>
+                  <input type="text" id="problemSubject" class="report-input" placeholder="e.g. Clearance printing delayed" required>
+                </div>
+              </div>
+
+              <div>
+                <label class="booking-label" for="problemDetails">Problem Description</label>
+                <textarea id="problemDetails" class="report-textarea" placeholder="Please describe what happened in detail, including time, location, or queue number..." required></textarea>
+              </div>
+
+              <div class="report-footer-row">
+                <div class="report-contact-field">
+                  <label class="booking-label" for="problemContact">Your Contact Number for Follow-up</label>
+                  <input type="tel" id="problemContact" class="report-input" placeholder="09171234567" required>
+                </div>
+                <div class="report-action-field">
+                  <button type="submit" class="btn-report-submit" id="btnSubmitReport">Submit Problem Report</button>
+                </div>
+              </div>
+            </form>
+
+            <div style="margin-top: 24px;">
+              <h3 style="font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; color: var(--dash-green); margin-bottom: 10px;">
+                Your Submitted Reports
+              </h3>
+              <div class="report-history-feed" id="reportHistoryFeed">
+                <!-- User submitted reports populated by script.js -->
+              </div>
+            </div>
+          </section>
+        </div>
       </section>
 
     </div>

@@ -1,0 +1,6 @@
+{
+  "name": "LaanBayan",
+  "description": "Barangay appointment and service availability system to cut down on walk-in queues and schedule transactions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

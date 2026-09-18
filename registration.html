@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kavivanar&family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/registration.css">
 </head>
@@ -23,35 +23,75 @@
 <main class="register-page">
   <div class="register-card">
     <h2 class="register-heading">Create new account</h2>
+    <p class="register-sub">Enter your resident information to create your portal credentials.</p>
 
     <p class="form-error" id="registerError" role="alert" hidden>Please check the fields above and try again.</p>
+    <div id="registerSuccess" style="display:none; background:#e8f7ec; color:#1e6b36; font-size:13px; padding:10px 14px; border-radius:8px; margin-bottom:14px; font-weight:600;">
+      Account created successfully! Redirecting to login...
+    </div>
 
     <form id="registerForm" novalidate>
-      <div class="field">
-        <label for="fullName">Full Name</label>
-        <div class="input-wrap">
-          <input id="fullName" name="fullName" type="text" placeholder="Ex. Juan Dela Cruz" required autocomplete="name">
+      <div class="form-row-2">
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <div class="input-wrap">
+            <input id="fullName" name="fullName" type="text" placeholder="Ex. Juan Dela Cruz" required autocomplete="name">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="age">Age</label>
+          <div class="input-wrap">
+            <input id="age" name="age" type="number" min="1" max="130" placeholder="Ex. 28" required>
+          </div>
         </div>
       </div>
 
       <div class="field">
-        <label for="purok">Purok / Address</label>
+        <label for="address">Address (House / Bldg / Lot No.)</label>
         <div class="input-wrap">
-          <input id="purok" name="purok" type="text" placeholder="Ex. Purok 4, Barangay Maharlika" required autocomplete="off">
+          <input id="address" name="address" type="text" placeholder="Ex. #14 Dahlia St., Purok 3" required autocomplete="street-address">
         </div>
       </div>
 
-      <div class="field">
-        <label for="contact">Contact Number</label>
-        <div class="input-wrap">
-          <input id="contact" name="contact" type="tel" placeholder="Ex. 0917XXXXXXX" required autocomplete="tel">
+      <div class="form-row-2">
+        <div class="field">
+          <label for="zone">Zone</label>
+          <div class="input-wrap">
+            <select id="zone" name="zone" required>
+              <option value="" disabled selected>Select Zone</option>
+              <option value="Zone 1">Zone 1</option>
+              <option value="Zone 2">Zone 2</option>
+              <option value="Zone 3">Zone 3</option>
+              <option value="Zone 4">Zone 4</option>
+              <option value="Zone 5">Zone 5</option>
+              <option value="Zone 6">Zone 6</option>
+              <option value="Zone 7">Zone 7</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="street">Street</label>
+          <div class="input-wrap">
+            <input id="street" name="street" type="text" placeholder="Ex. Mabini St." required>
+          </div>
         </div>
       </div>
 
-      <div class="field">
-        <label for="barangayId">Barangay ID</label>
-        <div class="input-wrap">
-          <input id="barangayId" name="barangayId" type="text" placeholder="Enter ID number for the barangay card" required autocomplete="off">
+      <div class="form-row-2">
+        <div class="field">
+          <label for="residencyDuration">Year(s) / Months of Residency</label>
+          <div class="input-wrap">
+            <input id="residencyDuration" name="residencyDuration" type="text" placeholder="Ex. 5 Years, 3 Months" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="contact">Contact Number</label>
+          <div class="input-wrap">
+            <input id="contact" name="contact" type="tel" placeholder="Ex. 09171234567" required autocomplete="tel">
+          </div>
         </div>
       </div>
 
@@ -77,10 +117,10 @@
         </div>
       </div>
 
-      <label class="agree-row">
+      <div class="agree-row">
         <input type="checkbox" id="agreeTerms" required>
-        <span>I agree to share my information with regards to the <a href="#">Privacy and Policy</a> of this site.</span>
-      </label>
+        <label for="agreeTerms">I agree to share my information with regards to the <button type="button" id="openPrivacyModal" class="privacy-link-btn">Privacy and Policy</button> of this site.</label>
+      </div>
 
       <button type="submit" class="btn-proceed btn-register">Register Now</button>
     </form>
@@ -88,6 +128,89 @@
     <div class="register-line">Already have an account? <a href="index.html" class="register-link">Login here</a></div>
   </div>
 </main>
+
+<!-- Privacy and Policy Modal -->
+<div class="policy-modal-backdrop" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="policyModalTitle" hidden>
+  <div class="policy-modal-box">
+    <div class="policy-modal-header">
+      <div>
+        <span class="policy-badge">Republic Act No. 10173</span>
+        <h3 id="policyModalTitle">Privacy and Policy</h3>
+      </div>
+      <button type="button" class="policy-modal-close" id="closePrivacyModal" aria-label="Close Privacy and Policy">&times;</button>
+    </div>
+    
+    <div class="policy-modal-body">
+      <p class="policy-lead">
+        Barangay Ugac Sur is committed to respecting and safeguarding the personal data and privacy of all residents in accordance with <strong>Republic Act No. 10173 (Data Privacy Act of 2012)</strong> and its Implementing Rules and Regulations.
+      </p>
+
+      <div class="policy-text-section">
+        <h4>1. Information We Collect</h4>
+        <p>
+          When registering an account or applying for barangay services through the Laan Bayan portal, we collect essential resident identification details including:
+        </p>
+        <ul>
+          <li>Full name and age</li>
+          <li>Residential address, zone, and street</li>
+          <li>Duration of residency in Barangay Ugac Sur</li>
+          <li>Active mobile telephone contact number</li>
+          <li>Account credentials (encrypted password)</li>
+          <li>Requested civic documents, transaction purpose, and appointment schedules</li>
+        </ul>
+      </div>
+
+      <div class="policy-text-section">
+        <h4>2. Purpose of Collection &amp; Processing</h4>
+        <p>
+          The personal data collected is processed strictly for the following legitimate civic and administrative frontline services:
+        </p>
+        <ul>
+          <li>Verifying residency status and resident identity records.</li>
+          <li>Scheduling appointments and assigning official queue slots for frontline desk services.</li>
+          <li>Validating and issuing requested clearances, certificates, and endorsements.</li>
+          <li>Sending SMS updates or notifications regarding queue numbers and processing schedules.</li>
+        </ul>
+      </div>
+
+      <div class="policy-text-section">
+        <h4>3. Protection, Confidentiality &amp; Storage</h4>
+        <p>
+          We implement organizational, physical, and technical safeguards to secure your personal data against unauthorized access, disclosure, alteration, or unlawful destruction. Access is strictly restricted to authorized barangay personnel and desk officers. We do not sell, disclose, or share personal data with unauthorized third parties or commercial entities.
+        </p>
+      </div>
+
+      <div class="policy-text-section">
+        <h4>4. Resident Rights under the Data Privacy Act</h4>
+        <p>
+          As a data subject, you retain full rights under the Data Privacy Act of 2012:
+        </p>
+        <ul>
+          <li><strong>Right to be Informed:</strong> To know what personal data is gathered, processed, and protected.</li>
+          <li><strong>Right to Access:</strong> To request a summary or verification of your personal records.</li>
+          <li><strong>Right to Rectification:</strong> To correct inaccurate or outdated information in your profile.</li>
+          <li><strong>Right to Object or Erasure:</strong> To request account deactivation or removal, subject to statutory government archiving laws.</li>
+        </ul>
+      </div>
+
+      <div class="policy-text-section">
+        <h4>5. Data Protection Inquiries &amp; Contact Desk</h4>
+        <p>
+          For questions, feedback, or requests regarding your personal data or privacy rights, please contact our designated office:
+        </p>
+        <p class="policy-contact-info">
+          <strong>Email:</strong> dpo.ugac@laanbayan.gov.ph<br>
+          <strong>Frontline Office:</strong> Barangay Hall of Ugac Sur, Tuguegarao City, Cagayan
+        </p>
+      </div>
+    </div>
+
+    <div class="policy-modal-footer">
+      <button type="button" class="btn-policy-close" id="btnPolicyClose">Close</button>
+      <button type="button" class="btn-policy-accept" id="btnPolicyAccept">I Understand &amp; Agree</button>
+    </div>
+  </div>
+</div>
 
 <script src="js/script.js"></script>
 </body>

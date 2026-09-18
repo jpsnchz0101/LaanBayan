@@ -1,0 +1,174 @@
+/* Admin login page styling */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-dark);
+  min-height: 100vh;
+  margin: 0;
+}
+
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #fffefb 0%, #f6ecd8 90%);
+  padding: 24px;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 380px;
+  background-color: #ffffff;
+  border-radius: 18px;
+  padding: 34px 30px 28px;
+  box-shadow: 0 10px 30px rgba(45, 55, 45, 0.06);
+  border: 1px solid rgba(45, 90, 63, 0.08);
+}
+
+/* Brand header */
+.admin-card-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.admin-logo-icon {
+  flex-shrink: 0;
+}
+
+.admin-brand-wordmark {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.2px;
+  line-height: 1;
+}
+
+.admin-brand-wordmark .laan {
+  color: #244b31;
+}
+
+.admin-brand-wordmark .bayan {
+  color: #b88628;
+}
+
+/* Heading and subtext */
+.admin-card-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #244b31;
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+
+.admin-card-subtitle {
+  font-size: 12.5px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* Error message banner */
+.admin-login-error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+/* Form input fields */
+.admin-field-group {
+  margin-bottom: 14px;
+}
+
+.admin-field-label {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+.admin-field-input {
+  width: 100%;
+  height: 42px;
+  background-color: #f1f3ee;
+  border: 1px solid #e1e5de;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: #1f2937;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.admin-field-input:focus {
+  background-color: #ffffff;
+  border-color: #244b31;
+  box-shadow: 0 0 0 3px rgba(36, 75, 49, 0.1);
+}
+
+/* Submit button */
+.btn-admin-login-action {
+  width: 100%;
+  height: 42px;
+  background-color: #274c33;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-admin-login-action:hover {
+  background-color: #1f3d29;
+}
+
+.btn-admin-login-action:active {
+  transform: translateY(1px);
+}
+
+/* Back link to resident login */
+.admin-login-bottom {
+  text-align: center;
+  margin-top: 14px;
+}
+
+.link-resident-login {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #274c33;
+  text-decoration: underline;
+  transition: opacity 0.15s ease;
+}
+
+.link-resident-login:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+  .admin-login-card {
+    padding: 28px 22px 24px;
+    border-radius: 14px;
+  }
+}

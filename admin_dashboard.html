@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaanBayan — Admin Dashboard</title>
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/admin_dashboard.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- Mobile backdrop overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar navigation -->
+  <aside class="sidebar expanded" id="sidebar">
+
+    <div class="sidebar-top">
+      <div class="sidebar-brand">
+        <img class="logo-icon" src="assets/icons/favicon.svg" width="26" height="26" alt="LaanBayan Sprout Logo">
+        <span class="sidebar-brand-text"><span class="laan">Laan</span><span class="bayan">Bayan</span></span>
+      </div>
+
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" aria-expanded="true">
+        <img src="assets/icons/option.svg" width="20" height="20" alt="Toggle Options">
+        <span class="sidebar-toggle-text">Options</span>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-admin-page="overview" title="Live Dashboard & Overview">
+        <img src="assets/icons/dashboard.svg" width="20" height="20" alt="Dashboard Overview">
+        <span>Overview</span>
+      </a>
+
+      <a href="#" class="sidebar-link" data-admin-page="directory" title="Resident Directory">
+        <img src="assets/icons/user.svg" width="20" height="20" alt="Resident Directory">
+        <span>Resident Directory</span>
+      </a>
+
+      <a href="#" class="sidebar-link" data-admin-page="completed" title="Completed & Cancelled Appointments">
+        <img src="assets/icons/queue.svg" width="20" height="20" alt="Completed Queue">
+        <span>Completed / Cancelled</span>
+      </a>
+
+      <a href="#" class="sidebar-link" data-admin-page="staff" title="Staff Attendance">
+        <img src="assets/icons/check.svg" width="20" height="20" alt="Staff Attendance">
+        <span>Staff Attendance</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-user">
+        <img src="assets/icons/user.svg" width="20" height="20" alt="Admin Profile">
+        <div class="sidebar-user-info">
+          <span class="sidebar-user-name">Barangay Admin</span>
+          <span class="sidebar-user-role">Administrator</span>
+        </div>
+      </div>
+
+      <a href="admin_login.html" class="sidebar-link sidebar-signout" id="adminSignOutLink">
+        <img src="assets/icons/log-out.svg" width="20" height="20" alt="Sign Out">
+        <span>Sign out</span>
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- Main content area -->
+  <main class="admin-main">
+
+    <!-- Mobile Top Navigation Bar -->
+    <div class="dash-mobile-topbar" id="dashMobileTopbar">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="mobile-brand">
+        <img class="logo-icon" src="assets/icons/favicon.svg" width="22" height="22" alt="LaanBayan Logo" style="filter: brightness(0) invert(1);">
+        <span class="mobile-brand-text"><span class="laan">Laan</span><span class="bayan">Bayan</span></span>
+      </div>
+      <div class="mobile-admin-badge">
+        <span>Admin</span>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Top header -->
+      <header class="admin-header">
+        <div>
+          <h1 class="admin-title">Admin Dashboard</h1>
+          <p class="admin-subtitle">Manage appointments, services, announcements, and visitor stats.</p>
+        </div>
+        <time class="admin-clock" id="adminClock">Thu, Sep 17 · 10:50 PM</time>
+      </header>
+
+      <!-- Tab 1: Live appointments and queue -->
+      <section class="admin-section active" data-section="overview">
+        <div class="admin-grid">
+
+          <!-- Left column: live tables and announcements -->
+          <div class="admin-col">
+
+            <!-- Live appointments table -->
+            <div class="admin-card">
+              <h2 class="admin-card-title">Live Appointments Table</h2>
+              <p class="admin-card-subtitle">
+                Update a resident's status as they move through the queue. Completed and cancelled appointments move to the <a href="#" id="linkToCompletedTab">Completed / Cancelled</a> tab.
+              </p>
+
+              <!-- In-queue table -->
+              <div class="queue-subgroup">
+                <div class="queue-subgroup-title">
+                  In Queue <span class="count" id="countInQueue">(1)</span>
+                </div>
+                <div class="admin-table-wrap">
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Resident</th>
+                        <th>Service</th>
+                        <th>Queue No.</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableInQueueBody">
+                      <!-- Rows populated by script.js -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Processing table -->
+              <div class="queue-subgroup">
+                <div class="queue-subgroup-title">
+                  Processing <span class="count" id="countProcessing">(0)</span>
+                </div>
+                <div class="admin-table-wrap">
+                  <table class="admin-table" id="tableProcessingWrap" style="display:none;">
+                    <thead>
+                      <tr>
+                        <th>Resident</th>
+                        <th>Service</th>
+                        <th>Queue No.</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableProcessingBody">
+                      <!-- Rows populated by script.js -->
+                    </tbody>
+                  </table>
+                </div>
+                <div class="queue-empty-text" id="emptyProcessingText">None right now.</div>
+              </div>
+
+              <!-- Ready to serve table -->
+              <div class="queue-subgroup">
+                <div class="queue-subgroup-title">
+                  Ready to Serve <span class="count" id="countReady">(0)</span>
+                </div>
+                <div class="admin-table-wrap">
+                  <table class="admin-table" id="tableReadyWrap" style="display:none;">
+                    <thead>
+                      <tr>
+                        <th>Resident</th>
+                        <th>Service</th>
+                        <th>Queue No.</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableReadyBody">
+                      <!-- Rows populated by script.js -->
+                    </tbody>
+                  </table>
+                </div>
+                <div class="queue-empty-text" id="emptyReadyText">None right now.</div>
+              </div>
+
+            </div>
+
+            <!-- Announcement management card -->
+            <div class="admin-card">
+              <h2 class="admin-card-title">Announcement Management</h2>
+              <p class="admin-card-subtitle">Post or broadcast an announcement to all residents.</p>
+
+              <form id="announcementForm" class="announcement-form">
+                <input type="text" id="announcementTitleInput" class="admin-input" placeholder="Title" required>
+                <textarea id="announcementMessageInput" class="admin-textarea" placeholder='Halimbawa: "Mayroon pong libreng bakuna para sa mga alagang hayop sa Biyernes..."' required></textarea>
+                <button type="submit" class="btn-admin-primary" id="btnPostAnnouncement">Post New</button>
+              </form>
+
+              <div class="announcements-feed" id="adminAnnouncementsFeed">
+                <!-- Announcements list populated by script.js -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right column: service availability and stats -->
+          <div class="admin-col">
+
+            <!-- Service availability toggles -->
+            <div class="admin-card">
+              <h2 class="admin-card-title">Service Availability Control</h2>
+              <p class="admin-card-subtitle">Toggle which barangay services are currently open for booking.</p>
+
+              <div class="service-toggle-list" id="serviceToggleList">
+                <!-- Services list populated by script.js -->
+              </div>
+            </div>
+
+            <!-- Visitor stats and graph -->
+            <div class="admin-card">
+              <h2 class="admin-card-title">Visitor Analytics</h2>
+              <p class="admin-card-subtitle">Track resident portal engagement and appointment throughput.</p>
+
+              <div class="analytics-cards">
+                <div class="stat-box">
+                  <div class="stat-label">Weekly</div>
+                  <div class="stat-value" id="statWeekly">2</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-label">Monthly</div>
+                  <div class="stat-value" id="statMonthly">13</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-label">Yearly</div>
+                  <div class="stat-value" id="statYearly">13</div>
+                </div>
+              </div>
+
+              <div class="trend-container">
+                <span class="trend-caption">Kasalukuyang linggo na trend</span>
+                <div class="trend-bar-track">
+                  <div class="trend-bar-fill" style="width: 78%;"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Tab 2: Resident directory -->
+      <section class="admin-section" data-section="directory">
+        <div class="admin-card">
+          <h2 class="admin-card-title">Resident Directory</h2>
+          <p class="admin-card-subtitle">Look up a resident by name and review their details and appointment history.</p>
+
+          <div class="search-bar-row">
+            <input type="text" id="residentSearchInput" class="search-input" placeholder="Search by resident name...">
+            <button type="button" id="btnSearchResidents" class="btn-admin-primary">Search</button>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Contact</th>
+                  <th>Zone / Street</th>
+                  <th>Address</th>
+                  <th>Residency</th>
+                  <th>Appointments</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="residentDirectoryBody">
+                <!-- Directory rows populated by script.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: Completed and cancelled appointments -->
+      <section class="admin-section" data-section="completed">
+        <div class="admin-col">
+
+          <!-- Completed appointments table -->
+          <div class="admin-card">
+            <h2 class="admin-card-title">Completed Appointments</h2>
+            <p class="admin-card-subtitle">Appointments marked Done move here to keep the live queue short.</p>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Resident</th>
+                    <th>Service</th>
+                    <th>Queue No.</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="completedAppointmentsBody">
+                  <!-- Rows populated by script.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Cancelled appointments table -->
+          <div class="admin-card">
+            <h2 class="admin-card-title">Cancelled Appointments</h2>
+            <p class="admin-card-subtitle">Review previously cancelled or expired resident appointments.</p>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Resident</th>
+                    <th>Service</th>
+                    <th>Queue No.</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="cancelledAppointmentsBody">
+                  <!-- Rows populated by script.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination controls -->
+            <div class="pagination-wrap">
+              <button type="button" class="page-btn active" id="pageBtn1">1</button>
+              <button type="button" class="page-btn" id="pageBtn2">2</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Tab 4: Staff attendance -->
+      <section class="admin-section" data-section="staff">
+        <div class="staff-attendance-layout">
+
+          <!-- Staff attendance list -->
+          <div class="admin-card">
+            <h2 class="admin-card-title">Staff Attendance</h2>
+            <p class="admin-card-subtitle">Toggle who is currently present. Residents see this live on their dashboard.</p>
+
+            <div class="staff-list" id="staffAttendanceList">
+              <!-- Staff rows populated by script.js -->
+            </div>
+          </div>
+
+          <!-- Form to add new staff member -->
+          <div class="admin-card">
+            <h2 class="admin-card-title">Add Staff Member</h2>
+            <p class="admin-card-subtitle">Register barangay officials and frontline duty officers.</p>
+
+            <form id="addStaffForm" class="announcement-form">
+              <input type="text" id="staffFullNameInput" class="admin-input" placeholder="Full name" required>
+              <input type="text" id="staffPositionInput" class="admin-input" placeholder="Position (e.g. Barangay Captain, Kagawad)" required>
+              <button type="submit" class="btn-admin-primary">Add Staff</button>
+            </form>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- Modal dialog showing resident and appointment details -->
+<div class="modal-overlay" id="appointmentDetailModal" role="dialog" aria-modal="true" aria-labelledby="modalDetailTitle">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="modalDetailTitle">Appointment &amp; Resident Details</h3>
+      <button type="button" class="modal-close" id="btnCloseDetailModal" aria-label="Close details modal">&times;</button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Reason for the visit -->
+      <div class="detail-purpose-box">
+        <span class="lbl">Purpose of Appointment:</span>
+        <div class="val" id="modalDetailPurpose">Scholarship application at City Hall</div>
+      </div>
+
+      <!-- Resident details -->
+      <div class="detail-section-title">Resident Information</div>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="lbl">Resident Name</span>
+          <span class="val" id="modalDetailName">Mark Macalintal</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Age</span>
+          <span class="val" id="modalDetailAge">28 years old</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Zone</span>
+          <span class="val" id="modalDetailZone">Zone 4</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Street</span>
+          <span class="val" id="modalDetailStreet">Mabini St.</span>
+        </div>
+        <div class="detail-item full-width">
+          <span class="lbl">Address</span>
+          <span class="val" id="modalDetailAddress">Purok 2, Barangay Ugac</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Residency Duration</span>
+          <span class="val" id="modalDetailResidency">5 Years</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Contact Number</span>
+          <span class="val" id="modalDetailContact">09955178593</span>
+        </div>
+      </div>
+
+      <!-- Appointment information -->
+      <div class="detail-section-title">Queue &amp; Service Details</div>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="lbl">Service Requested</span>
+          <span class="val" id="modalDetailService">Barangay Clearance</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Queue Number</span>
+          <span class="val" id="modalDetailQueueNo">01-003</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Appointment Date</span>
+          <span class="val" id="modalDetailDate">2026-09-18</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Time Slot</span>
+          <span class="val" id="modalDetailTime">Morning (8:00 AM - 11:30 AM)</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-admin-primary" id="btnModalCloseDone">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -31,15 +31,21 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
   background-color: var(--cream-bottom);
   color: var(--text-dark);
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* Shared auth form pieces — used by both the landing page login panel
-   and registration.html (per the original file's own note). */
+/* Common form styles used on login and registration pages */
 .form-error {
   background-color: #ffe1e1;
   color: #7a1a1a;
@@ -161,9 +167,7 @@ body {
   text-decoration: underline;
 }
 
-/* NOTE: #loginPanel / #registerPanel aren't used in index.html or registration.html
-   (both ship as separate pages, not a tab-switch panel) — likely leftover from an
-   earlier approach, safe to delete if confirmed unused */
+/* Fade transition for auth panels if toggled */
 #loginPanel,
 #registerPanel {
   animation: fade .35s ease;

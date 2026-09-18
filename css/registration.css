@@ -8,20 +8,26 @@
 
 .register-card {
   width: 100%;
-  max-width: 460px;
+  max-width: 540px;
   height: fit-content;
   background-color: var(--cream-top);
   border: 1px solid rgba(47, 77, 51, 0.08);
   border-radius: 16px;
-  padding: 28px 30px 26px;
-  box-shadow: 0 8px 20px rgba(47, 77, 51, 0.1);
+  padding: 28px 32px 26px;
+  box-shadow: 0 8px 24px rgba(47, 77, 51, 0.1);
 }
 
 .register-heading {
   font-family: 'DM Sans', sans-serif;
   font-weight: 800;
-  font-size: 20px;
+  font-size: 22px;
   color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.register-sub {
+  font-size: 13px;
+  color: var(--text-gray);
   margin-bottom: 20px;
 }
 
@@ -29,6 +35,24 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+}
+
+.input-wrap select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #e4e4e0;
+  background-color: #f4f4f1;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--text-dark);
+  outline: none;
+  cursor: pointer;
+}
+
+.input-wrap select:focus {
+  outline: 2px solid var(--green);
+  outline-offset: 1px;
+  background-color: #ffffff;
 }
 
 .agree-row {
@@ -46,10 +70,24 @@
   flex-shrink: 0;
 }
 
-.agree-row a {
+.agree-row a,
+.privacy-link-btn {
   color: var(--green-dark);
   font-weight: 700;
   text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  display: inline;
+}
+
+.agree-row a:hover,
+.privacy-link-btn:hover {
+  color: var(--green);
 }
 
 .btn-register {
@@ -60,7 +98,192 @@
   background-color: #3f7a4e;
 }
 
-/* Hero banner (reused from landing page; nav list intentionally removed) */
+/* Privacy and Policy Modal */
+.policy-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(22, 45, 31, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  animation: fadeInPolicy 0.2s ease;
+}
+
+.policy-modal-backdrop[hidden] {
+  display: none !important;
+}
+
+.policy-modal-box {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 620px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(18, 38, 25, 0.25);
+  border: 1px solid rgba(47, 77, 51, 0.12);
+  overflow: hidden;
+  animation: slideUpPolicy 0.25s ease;
+}
+
+@keyframes fadeInPolicy {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpPolicy {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.policy-modal-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #edf1ee;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  background-color: #fbfcfa;
+}
+
+.policy-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  background-color: rgba(47, 77, 51, 0.08);
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+
+.policy-modal-header h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--green-dark);
+  margin: 0;
+}
+
+.policy-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: #7a827c;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.policy-modal-close:hover {
+  color: #1a221c;
+  background-color: #edf1ee;
+}
+
+.policy-modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  color: var(--text-dark);
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.policy-lead {
+  font-size: 13.5px;
+  color: var(--green-dark);
+  background-color: #f7faf8;
+  border-left: 3px solid var(--green);
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 18px;
+}
+
+.policy-text-section {
+  margin-bottom: 18px;
+}
+
+.policy-text-section h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 6px;
+}
+
+.policy-text-section p {
+  color: var(--text-gray);
+  margin: 0 0 8px;
+}
+
+.policy-text-section ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-gray);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.policy-contact-info {
+  background-color: #f9fbf9;
+  border: 1px solid #e5ede7;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--green-dark);
+  line-height: 1.6;
+}
+
+.policy-modal-footer {
+  padding: 14px 24px;
+  border-top: 1px solid #edf1ee;
+  background-color: #fbfcfa;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-policy-close {
+  background-color: #edf1ee;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.btn-policy-close:hover {
+  background-color: #e2e8e3;
+}
+
+.btn-policy-accept {
+  background-color: var(--green);
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.btn-policy-accept:hover {
+  background-color: #3f7a4e;
+}
+
+/* Top hero banner and branding */
 .hero-section {
   position: relative;
   z-index: 1;
@@ -117,10 +340,11 @@
 }
 
 .headline {
-  font-family: 'Kavivanar', cursive;
-  font-weight: 400;
-  font-size: 56px;
+  font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+  font-weight: 800;
+  font-size: 48px;
   line-height: 1.15;
+  letter-spacing: -0.025em;
   color: var(--text-dark);
   margin-bottom: 18px;
 }
