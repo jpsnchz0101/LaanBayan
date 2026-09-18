@@ -289,7 +289,7 @@ if (registerForm) {
     const fullName = document.getElementById('fullName')?.value.trim();
     const age = document.getElementById('age')?.value.trim();
     const address = document.getElementById('address')?.value.trim();
-    const zone = document.getElementById('zone')?.value;
+    const zone = document.getElementById('zone')?.value.trim();
     const street = document.getElementById('street')?.value.trim();
     const residencyDuration = document.getElementById('residencyDuration')?.value.trim();
     const contact = document.getElementById('contact')?.value.trim();

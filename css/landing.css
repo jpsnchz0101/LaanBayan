@@ -61,56 +61,85 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 60px;
-  max-width: 1400px;
+  gap: clamp(36px, 4.5vw, 68px);
+  max-width: 1260px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px 30px 10px;
+  padding: 32px 36px 16px;
   flex: 1;
+}
+
+.hero-text-block {
+  flex: 1 1 540px;
+  max-width: 660px;
+  min-width: 0;
 }
 
 .eyebrow {
   color: var(--green);
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 1.2px;
+  font-size: 13px;
+  letter-spacing: 1.6px;
   text-transform: uppercase;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(45, 90, 63, 0.08);
+  border: 1px solid rgba(45, 90, 63, 0.12);
+  padding: 5px 14px;
+  border-radius: 20px;
 }
 
 .headline {
   font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
   font-weight: 800;
-  font-size: 48px;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
+  font-size: clamp(44px, 4.5vw, 62px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   color: var(--text-dark);
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .hero-sub {
-  max-width: 420px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--text-gray);
-  margin-bottom: 22px;
+  max-width: 580px;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.65;
+  color: #4a5c4f;
+  margin-bottom: 28px;
 }
 
 .feature-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px 16px;
 }
 
 .feature-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: var(--text-dark);
+  color: #1e3a29;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(45, 90, 63, 0.14);
+  padding: 8px 16px;
+  border-radius: 24px;
+  box-shadow: 0 2px 6px rgba(45, 90, 63, 0.04);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.feature-item:hover {
+  background-color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.feature-item img {
+  width: 17px;
+  height: 17px;
 }
 
 /* Downward explore indicator */
