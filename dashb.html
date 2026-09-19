@@ -152,11 +152,12 @@
       </div>
 
       <form class="booking-form" id="bookingForm">
+        <input type="hidden" name="csrf_token" value="" class="csrf-token-input">
         <div class="booking-form-row-3col">
           <!-- Service selection -->
           <div class="booking-form-group">
             <label class="booking-label" for="serviceSelect">Choose Service</label>
-            <select class="booking-select" id="serviceSelect" required>
+            <select class="booking-select" id="serviceSelect" name="service_id" required>
               <option value="" disabled selected>Pumili ng serbisyo</option>
               <option value="residency">Certificate of Residency</option>
               <option value="clearance">Barangay Clearance</option>
@@ -166,13 +167,13 @@
               <option value="job_seeker">First Time Job Seeker Certificate</option>
               <option value="others">Others</option>
             </select>
-            <input type="text" class="booking-input" id="othersInput" placeholder="Specify document / service needed" style="display:none; margin-top: 6px;">
+            <input type="text" class="booking-input" id="othersInput" name="others_detail" placeholder="Specify document / service needed" style="display:none; margin-top: 6px;">
           </div>
 
           <!-- Date picker -->
           <div class="booking-form-group">
             <label class="booking-label" for="dateSelect">Appointment Date</label>
-            <select class="booking-select" id="dateSelect" required>
+            <select class="booking-select" id="dateSelect" name="appointment_date" required>
               <option value="" disabled selected>Pumili ng Petsa</option>
             </select>
           </div>
@@ -188,7 +189,7 @@
                 Afternoon (1:00 PM – 4:30 PM)
               </button>
             </div>
-            <input type="hidden" id="selectedTimeSlot" value="Morning (8:00 AM - 11:30 AM)">
+            <input type="hidden" id="selectedTimeSlot" name="time_slot" value="Morning (8:00 AM - 11:30 AM)">
           </div>
         </div>
 
@@ -196,7 +197,7 @@
           <!-- Appointment purpose field -->
           <div class="booking-form-group booking-purpose-group">
             <label class="booking-label" for="appointmentPurpose">Purpose of Appointment</label>
-            <input type="text" class="booking-input" id="appointmentPurpose" placeholder="e.g. Scholarship requirement, Job application, Bank account" required>
+            <input type="text" class="booking-input" id="appointmentPurpose" name="purpose" placeholder="e.g. Scholarship requirement, Job application, Bank account" required>
           </div>
 
           <!-- Submit button aligned with purpose input -->
@@ -303,10 +304,11 @@
             </p>
 
             <form id="reportProblemForm" class="report-form">
+              <input type="hidden" name="csrf_token" value="" class="csrf-token-input">
               <div class="report-form-grid">
                 <div>
                   <label class="booking-label" for="problemCategory">Category</label>
-                  <select id="problemCategory" class="report-select" required>
+                  <select id="problemCategory" name="category" class="report-select" required>
                     <option value="" disabled selected>Pumili ng kategorya</option>
                     <option value="Queue & Waiting Time">Queue &amp; Waiting Time Issue</option>
                     <option value="Document Requirements Error">Document or Information Error</option>
@@ -318,19 +320,19 @@
                 </div>
                 <div>
                   <label class="booking-label" for="problemSubject">Subject / Brief Summary</label>
-                  <input type="text" id="problemSubject" class="report-input" placeholder="e.g. Clearance printing delayed" required>
+                  <input type="text" id="problemSubject" name="subject" class="report-input" placeholder="e.g. Clearance printing delayed" required>
                 </div>
               </div>
 
               <div>
                 <label class="booking-label" for="problemDetails">Problem Description</label>
-                <textarea id="problemDetails" class="report-textarea" placeholder="Please describe what happened in detail, including time, location, or queue number..." required></textarea>
+                <textarea id="problemDetails" name="details" class="report-textarea" placeholder="Please describe what happened in detail, including time, location, or queue number..." required></textarea>
               </div>
 
               <div class="report-footer-row">
                 <div class="report-contact-field">
                   <label class="booking-label" for="problemContact">Your Contact Number for Follow-up</label>
-                  <input type="tel" id="problemContact" class="report-input" placeholder="09171234567" required>
+                  <input type="tel" id="problemContact" name="contact" class="report-input" placeholder="09171234567" required>
                 </div>
                 <div class="report-action-field">
                   <button type="submit" class="btn-report-submit" id="btnSubmitReport">Submit Problem Report</button>

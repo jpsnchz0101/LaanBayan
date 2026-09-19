@@ -207,8 +207,9 @@
               <p class="admin-card-subtitle">Post or broadcast an announcement to all residents.</p>
 
               <form id="announcementForm" class="announcement-form">
-                <input type="text" id="announcementTitleInput" class="admin-input" placeholder="Title" required>
-                <textarea id="announcementMessageInput" class="admin-textarea" placeholder='Halimbawa: "Mayroon pong libreng bakuna para sa mga alagang hayop sa Biyernes..."' required></textarea>
+                <input type="hidden" name="csrf_token" value="" class="csrf-token-input">
+                <input type="text" id="announcementTitleInput" name="title" class="admin-input" placeholder="Title" required>
+                <textarea id="announcementMessageInput" name="message" class="admin-textarea" placeholder='Halimbawa: "Mayroon pong libreng bakuna para sa mga alagang hayop sa Biyernes..."' required></textarea>
                 <button type="submit" class="btn-admin-primary" id="btnPostAnnouncement">Post New</button>
               </form>
 
@@ -378,9 +379,10 @@
             <p class="admin-card-subtitle">Register barangay officials and frontline duty officers.</p>
 
             <form id="addStaffForm" class="announcement-form">
-              <input type="text" id="staffFullNameInput" class="admin-input" placeholder="Full name" required>
-              <input type="text" id="staffPositionInput" class="admin-input" placeholder="Position (e.g. Barangay Captain, Kagawad)" required>
-              <button type="submit" class="btn-admin-primary">Add Staff</button>
+              <input type="hidden" name="csrf_token" value="" class="csrf-token-input">
+              <input type="text" id="staffFullNameInput" name="full_name" class="admin-input" placeholder="Full name" required>
+              <input type="text" id="staffPositionInput" name="position" class="admin-input" placeholder="Position (e.g. Barangay Captain, Kagawad)" required>
+              <button type="submit" class="btn-admin-primary" id="btnAddStaffSubmit">Add Staff</button>
             </form>
           </div>
 

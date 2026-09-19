@@ -61,6 +61,7 @@
       <div class="resident-login-error" id="formError" role="alert" style="display: none;">Invalid ID number or password. Please try again.</div>
 
       <form id="loginForm" novalidate>
+        <input type="hidden" name="csrf_token" value="" class="csrf-token-input">
         <div class="resident-field-group">
           <label for="brgy-id" class="resident-field-label">Contact Number or Resident Name</label>
           <input

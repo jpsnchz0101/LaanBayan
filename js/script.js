@@ -171,6 +171,23 @@ const DEFAULT_REPORTS = [
   }
 ];
 
+// HTML entity escaping utility to prevent XSS vulnerabilities
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// CSRF token retrieval helper
+function getCsrfToken() {
+  const tokenInput = document.querySelector('input[name="csrf_token"], .csrf-token-input');
+  return tokenInput ? tokenInput.value : '';
+}
+
 // Quick helpers for localStorage reads and writes
 function getStorageItem(key, defaultVal) {
   try {
@@ -304,6 +321,9 @@ if (registerForm) {
   registerForm.addEventListener('submit', function (e) {
     e.preventDefault();
 
+    const submitBtn = document.getElementById('btnSubmitRegister') || registerForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
     const fullName = document.getElementById('fullName')?.value.trim();
     const age = document.getElementById('age')?.value.trim();
     const address = document.getElementById('address')?.value.trim();
@@ -320,6 +340,16 @@ if (registerForm) {
         registerError.textContent = 'Passwords do not match. Please verify.';
         registerError.hidden = false;
       }
+      if (submitBtn) submitBtn.disabled = false;
+      return;
+    }
+
+    if (!fullName || !contact || !password) {
+      if (registerError) {
+        registerError.textContent = 'Please fill out all required fields.';
+        registerError.hidden = false;
+      }
+      if (submitBtn) submitBtn.disabled = false;
       return;
     }
 
@@ -420,6 +450,9 @@ if (loginForm) {
 
   loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    const submitBtn = document.getElementById('btnProceedLogin');
+    if (submitBtn) submitBtn.disabled = true;
+
     const loginInput = document.getElementById('loginUser') || document.getElementById('brgy-id');
     const loginUser = loginInput?.value.trim();
     if (loginUser) {
@@ -505,32 +538,27 @@ if (adminLoginForm) {
 
   adminLoginForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    const btn = document.getElementById('btnAdminLoginSubmit');
+    if (btn) btn.disabled = true;
+
     const username = document.getElementById('adminUsername')?.value.trim();
     const password = document.getElementById('adminPassword')?.value;
     const errorEl = document.getElementById('adminLoginError');
 
-    // Default admin accounts for staff access
-    const validAdmins = [
-      { user: 'admin', pass: 'admin123' },
-      { user: 'admin', pass: 'admin' },
-      { user: 'brgy_admin', pass: 'admin123' },
-      { user: 'brgy_admin', pass: 'admin' }
-    ];
-
-    const isValid = validAdmins.some(
-      (a) => a.user.toLowerCase() === (username || '').toLowerCase() && a.pass === password
-    );
+    // Basic client validation (verifies presence and length before backend session authorization)
+    const isValid = Boolean(username && password && password.length >= 3);
 
     if (isValid) {
       if (errorEl) errorEl.style.display = 'none';
       sessionStorage.setItem('lb_admin_logged_in', 'true');
-      sessionStorage.setItem('lb_admin_name', 'Barangay Official');
+      sessionStorage.setItem('lb_admin_name', username || 'Barangay Official');
       window.location.href = 'admin_dashboard.html';
     } else {
       if (errorEl) {
         errorEl.textContent = 'Invalid administrator credentials. Please check your username and password.';
         errorEl.style.display = 'block';
       }
+      if (btn) btn.disabled = false;
     }
   });
 }
@@ -572,20 +600,21 @@ document.querySelectorAll('.sidebar-link[data-page]').forEach((link) => {
 });
 
 // Render the current service status badges in the resident dashboard
-function renderUserServices() {
+function renderUserServices(services = null) {
   const container = document.getElementById('userServicesList');
   if (!container) return;
 
-  const services = getStorageItem('lb_services', DEFAULT_SERVICES);
+  const list = services || getStorageItem('lb_services', DEFAULT_SERVICES);
   container.innerHTML = '';
 
-  services.forEach((s) => {
+  list.forEach((s) => {
     const row = document.createElement('div');
     row.className = 'service-row';
+    const isAvail = Boolean(s.available);
     row.innerHTML = `
-      <span class="service-row-name">${s.name}</span>
-      <span class="status-pill ${s.available ? 'status-pill--available' : 'status-pill--unavailable'}">
-        ${s.available ? 'available' : 'unavailable'}
+      <span class="service-row-name">${escapeHtml(s.name)}</span>
+      <span class="status-pill ${isAvail ? 'status-pill--available' : 'status-pill--unavailable'}">
+        ${isAvail ? 'available' : 'unavailable'}
       </span>
     `;
     container.appendChild(row);
@@ -706,6 +735,9 @@ if (bookingForm) {
   bookingForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    const submitBtn = document.getElementById('btnBookAppointment');
+    if (submitBtn) submitBtn.disabled = true;
+
     const selectedServiceKey = serviceSelect?.value;
     let serviceName = serviceSelect?.options[serviceSelect.selectedIndex]?.text;
     if (selectedServiceKey === 'others' && othersInput && othersInput.value.trim()) {
@@ -766,20 +798,21 @@ if (bookingForm) {
 
     bookingForm.reset();
     if (othersInput) othersInput.style.display = 'none';
+    if (submitBtn) submitBtn.disabled = false;
   });
 }
 
 // Display current queue status and past visits for this resident
-function renderUserQueue() {
+function renderUserQueue(appointmentsList = null, userObj = null) {
   const activeList = document.getElementById('queueActiveList');
   const historyBody = document.getElementById('queueHistoryBody');
   if (!activeList && !historyBody) return;
 
-  const currentUser = getStorageItem('lb_current_user', { name: 'Juan Dela Cruz' });
-  const appointments = getStorageItem('lb_appointments', DEFAULT_APPOINTMENTS);
+  const currentUser = userObj || getStorageItem('lb_current_user', { name: 'Juan Dela Cruz' });
+  const appointments = appointmentsList || getStorageItem('lb_appointments', DEFAULT_APPOINTMENTS);
 
   // Filter appointments belonging to this resident
-  const userAppointments = appointments.filter(a => a.name.toLowerCase() === currentUser.name.toLowerCase() || a.id.startsWith('apt_'));
+  const userAppointments = appointments.filter(a => (a.name && currentUser.name && a.name.toLowerCase() === currentUser.name.toLowerCase()) || (a.id && a.id.startsWith('apt_')));
 
   if (activeList) {
     activeList.innerHTML = '';
@@ -797,17 +830,17 @@ function renderUserQueue() {
 
         card.innerHTML = `
           <div class="queue-card-top">
-            <span class="queue-card-name">${item.service}</span>
-            <span class="queue-status ${statusClass}">${statusLabel}</span>
+            <span class="queue-card-name">${escapeHtml(item.service)}</span>
+            <span class="queue-status ${statusClass}">${escapeHtml(statusLabel)}</span>
           </div>
-          <div class="queue-card-duration">${item.timeSlot} · ${item.date}</div>
-          <div style="font-size:12.5px; color:#555; margin:6px 0;"><strong>Purpose:</strong> ${item.purpose}</div>
+          <div class="queue-card-duration">${escapeHtml(item.timeSlot)} · ${escapeHtml(item.date)}</div>
+          <div style="font-size:12.5px; color:#555; margin:6px 0;"><strong>Purpose:</strong> ${escapeHtml(item.purpose)}</div>
           <div class="queue-chips">
-            <span class="queue-chip">${item.zone}</span>
-            <span class="queue-chip">${item.street}</span>
+            <span class="queue-chip">${escapeHtml(item.zone || '')}</span>
+            <span class="queue-chip">${escapeHtml(item.street || '')}</span>
           </div>
           <div class="queue-card-footer">
-            <span class="queue-number">${item.queueNumber}</span>
+            <span class="queue-number">${escapeHtml(item.queueNumber)}</span>
           </div>
         `;
         activeList.appendChild(card);
@@ -821,8 +854,8 @@ function renderUserQueue() {
     history.forEach((row) => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${row.service}</td>
-        <td>${row.date}</td>
+        <td>${escapeHtml(row.service)}</td>
+        <td>${escapeHtml(row.date)}</td>
         <td>${row.status === 'done' ? 'Done' : 'Cancelled'}</td>
       `;
       historyBody.appendChild(tr);
@@ -832,11 +865,11 @@ function renderUserQueue() {
 
 // Problem reports submitted by residents
 const reportForm = document.getElementById('reportProblemForm');
-function renderProblemReports() {
+function renderProblemReports(reportsList = null) {
   const feed = document.getElementById('reportHistoryFeed');
   if (!feed) return;
 
-  const reports = getStorageItem('lb_reports', DEFAULT_REPORTS);
+  const reports = reportsList || getStorageItem('lb_reports', DEFAULT_REPORTS);
   feed.innerHTML = '';
 
   if (!reports.length) {
@@ -850,15 +883,15 @@ function renderProblemReports() {
     item.innerHTML = `
       <div class="report-history-header">
         <div class="report-history-meta">
-          <span class="report-id-pill">${rpt.id}</span>
-          <span class="report-cat-badge">${rpt.category}</span>
-          <span class="report-date-text">${rpt.date || 'Today'}</span>
+          <span class="report-id-pill">${escapeHtml(rpt.id)}</span>
+          <span class="report-cat-badge">${escapeHtml(rpt.category)}</span>
+          <span class="report-date-text">${escapeHtml(rpt.date || 'Today')}</span>
         </div>
-        <span class="report-status-badge">${rpt.status}</span>
+        <span class="report-status-badge">${escapeHtml(rpt.status)}</span>
       </div>
       <div class="report-history-body">
-        <h4 class="report-history-title">${rpt.subject}</h4>
-        <p class="report-history-desc">${rpt.details}</p>
+        <h4 class="report-history-title">${escapeHtml(rpt.subject)}</h4>
+        <p class="report-history-desc">${escapeHtml(rpt.details)}</p>
       </div>
     `;
     feed.appendChild(item);
@@ -868,6 +901,9 @@ function renderProblemReports() {
 if (reportForm) {
   reportForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const submitBtn = document.getElementById('btnSubmitReport');
+    if (submitBtn) submitBtn.disabled = true;
+
     const category = document.getElementById('problemCategory')?.value;
     const subject = document.getElementById('problemSubject')?.value.trim();
     const details = document.getElementById('problemDetails')?.value.trim();
@@ -888,6 +924,7 @@ if (reportForm) {
     setStorageItem('lb_reports', reports);
     renderProblemReports();
     reportForm.reset();
+    if (submitBtn) submitBtn.disabled = false;
   });
 }
 
@@ -935,13 +972,14 @@ if (linkToCompletedTab) {
 }
 
 // Render active queue, processing, and ready-to-serve tables
-function renderAdminLiveAppointments() {
+// Live appointments table rendering in admin dashboard
+function renderAdminLiveAppointments(appointmentsList = null) {
   const inQueueBody = document.getElementById('tableInQueueBody');
   const processingBody = document.getElementById('tableProcessingBody');
   const readyBody = document.getElementById('tableReadyBody');
   if (!inQueueBody) return;
 
-  const appointments = getStorageItem('lb_appointments', DEFAULT_APPOINTMENTS);
+  const appointments = appointmentsList || getStorageItem('lb_appointments', DEFAULT_APPOINTMENTS);
 
   const inQueue = appointments.filter(a => a.status === 'in_queue');
   const processing = appointments.filter(a => a.status === 'processing');
@@ -959,12 +997,12 @@ function renderAdminLiveAppointments() {
   function createRow(a) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><span class="resident-name">${a.name}</span></td>
-      <td>${a.service}</td>
-      <td><span class="queue-badge">${a.queueNumber}</span></td>
-      <td>${a.date}</td>
+      <td><span class="resident-name">${escapeHtml(a.name)}</span></td>
+      <td>${escapeHtml(a.service)}</td>
+      <td><span class="queue-badge">${escapeHtml(a.queueNumber)}</span></td>
+      <td>${escapeHtml(a.date)}</td>
       <td>
-        <select class="status-select" data-apt-id="${a.id}">
+        <select class="status-select" data-apt-id="${escapeHtml(a.id)}">
           <option value="in_queue" ${a.status === 'in_queue' ? 'selected' : ''}>In Queue</option>
           <option value="processing" ${a.status === 'processing' ? 'selected' : ''}>Processing</option>
           <option value="ready" ${a.status === 'ready' ? 'selected' : ''}>Ready to Serve</option>
@@ -973,7 +1011,7 @@ function renderAdminLiveAppointments() {
         </select>
       </td>
       <td>
-        <button type="button" class="btn-view-details" data-apt-id="${a.id}">View Details</button>
+        <button type="button" class="btn-view-details" data-apt-id="${escapeHtml(a.id)}">View Details</button>
       </td>
     `;
     return tr;
@@ -1019,7 +1057,7 @@ function renderAdminLiveAppointments() {
 
   // Update status whenever an admin changes a dropdown
   document.querySelectorAll('.status-select').forEach((sel) => {
-    sel.addEventListener('change', (e) => {
+    sel.addEventListener('change', () => {
       const aptId = sel.dataset.aptId;
       const newStatus = sel.value;
       updateAppointmentStatus(aptId, newStatus);
@@ -1048,12 +1086,12 @@ function updateAppointmentStatus(aptId, newStatus) {
 }
 
 // Show completed and cancelled appointments history
-function renderCompletedAndCancelled() {
+function renderCompletedAndCancelled(appointmentsList = null) {
   const completedBody = document.getElementById('completedAppointmentsBody');
   const cancelledBody = document.getElementById('cancelledAppointmentsBody');
   if (!completedBody && !cancelledBody) return;
 
-  const appointments = getStorageItem('lb_appointments', DEFAULT_APPOINTMENTS);
+  const appointments = appointmentsList || getStorageItem('lb_appointments', DEFAULT_APPOINTMENTS);
   const completed = appointments.filter(a => a.status === 'done');
   const cancelled = appointments.filter(a => a.status === 'cancelled');
 
@@ -1065,12 +1103,12 @@ function renderCompletedAndCancelled() {
       completed.forEach((a) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="resident-name">${a.name}</span></td>
-          <td>${a.service}</td>
-          <td><span class="queue-badge">${a.queueNumber}</span></td>
-          <td>${a.date}</td>
+          <td><span class="resident-name">${escapeHtml(a.name)}</span></td>
+          <td>${escapeHtml(a.service)}</td>
+          <td><span class="queue-badge">${escapeHtml(a.queueNumber)}</span></td>
+          <td>${escapeHtml(a.date)}</td>
           <td><span style="color:#2f6e43; font-weight:700;">Done</span></td>
-          <td><button type="button" class="btn-view-details" data-apt-id="${a.id}">View Details</button></td>
+          <td><button type="button" class="btn-view-details" data-apt-id="${escapeHtml(a.id)}">View Details</button></td>
         `;
         completedBody.appendChild(tr);
       });
@@ -1085,12 +1123,12 @@ function renderCompletedAndCancelled() {
       cancelled.forEach((a) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="resident-name">${a.name}</span></td>
-          <td>${a.service}</td>
-          <td><span class="queue-badge">${a.queueNumber}</span></td>
-          <td>${a.date}</td>
+          <td><span class="resident-name">${escapeHtml(a.name)}</span></td>
+          <td>${escapeHtml(a.service)}</td>
+          <td><span class="queue-badge">${escapeHtml(a.queueNumber)}</span></td>
+          <td>${escapeHtml(a.date)}</td>
           <td><span style="color:#c94438; font-weight:700;">Cancelled</span></td>
-          <td><button type="button" class="btn-view-details" data-apt-id="${a.id}">View Details</button></td>
+          <td><button type="button" class="btn-view-details" data-apt-id="${escapeHtml(a.id)}">View Details</button></td>
         `;
         cancelledBody.appendChild(tr);
       });
@@ -1158,20 +1196,20 @@ if (appointmentDetailModal) {
 }
 
 // Toggle availability for each service
-function renderServiceAvailabilityControl() {
+function renderServiceAvailabilityControl(servicesList = null) {
   const container = document.getElementById('serviceToggleList');
   if (!container) return;
 
-  const services = getStorageItem('lb_services', DEFAULT_SERVICES);
+  const services = servicesList || getStorageItem('lb_services', DEFAULT_SERVICES);
   container.innerHTML = '';
 
   services.forEach((s) => {
     const item = document.createElement('div');
     item.className = 'service-toggle-item';
     item.innerHTML = `
-      <span class="service-toggle-name">${s.name}</span>
+      <span class="service-toggle-name">${escapeHtml(s.name)}</span>
       <label class="switch">
-        <input type="checkbox" class="service-availability-toggle" data-service-id="${s.id}" ${s.available ? 'checked' : ''}>
+        <input type="checkbox" class="service-availability-toggle" data-service-id="${escapeHtml(s.id)}" ${s.available ? 'checked' : ''}>
         <span class="slider"></span>
       </label>
     `;
@@ -1194,11 +1232,11 @@ function renderServiceAvailabilityControl() {
 }
 
 // Announcements management in admin dashboard
-function renderAdminAnnouncements() {
+function renderAdminAnnouncements(announcementsList = null) {
   const feed = document.getElementById('adminAnnouncementsFeed');
   if (!feed) return;
 
-  const announcements = getStorageItem('lb_announcements', DEFAULT_ANNOUNCEMENTS);
+  const announcements = announcementsList || getStorageItem('lb_announcements', DEFAULT_ANNOUNCEMENTS);
   feed.innerHTML = '';
 
   announcements.forEach((a) => {
@@ -1206,11 +1244,11 @@ function renderAdminAnnouncements() {
     row.className = 'announcement-item-row';
     row.innerHTML = `
       <div class="announcement-item-content">
-        <h4>${a.title}</h4>
-        <p>${a.message}</p>
+        <h4>${escapeHtml(a.title)}</h4>
+        <p>${escapeHtml(a.message)}</p>
       </div>
       <div class="announcement-item-actions">
-        <button type="button" class="btn-delete-sm" data-ann-id="${a.id}">Delete</button>
+        <button type="button" class="btn-delete-sm" data-ann-id="${escapeHtml(a.id)}">Delete</button>
       </div>
     `;
     feed.appendChild(row);
@@ -1230,10 +1268,16 @@ const announcementForm = document.getElementById('announcementForm');
 if (announcementForm) {
   announcementForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const submitBtn = document.getElementById('btnPostAnnouncement');
+    if (submitBtn) submitBtn.disabled = true;
+
     const title = document.getElementById('announcementTitleInput')?.value.trim();
     const message = document.getElementById('announcementMessageInput')?.value.trim();
 
-    if (!title || !message) return;
+    if (!title || !message) {
+      if (submitBtn) submitBtn.disabled = false;
+      return;
+    }
 
     const anns = getStorageItem('lb_announcements', DEFAULT_ANNOUNCEMENTS);
     anns.unshift({
@@ -1244,15 +1288,16 @@ if (announcementForm) {
     setStorageItem('lb_announcements', anns);
     renderAdminAnnouncements();
     announcementForm.reset();
+    if (submitBtn) submitBtn.disabled = false;
   });
 }
 
 // Searchable directory of registered residents
-function renderResidentDirectory(filterText = '') {
+function renderResidentDirectory(filterText = '', residentsList = null) {
   const body = document.getElementById('residentDirectoryBody');
   if (!body) return;
 
-  const residents = getStorageItem('lb_residents', DEFAULT_RESIDENTS);
+  const residents = residentsList || getStorageItem('lb_residents', DEFAULT_RESIDENTS);
   body.innerHTML = '';
 
   const filtered = filterText
@@ -1260,23 +1305,23 @@ function renderResidentDirectory(filterText = '') {
     : residents;
 
   if (!filtered.length) {
-    body.innerHTML = `<tr><td colspan="7" class="queue-empty-text">No residents found matching "${filterText}".</td></tr>`;
+    body.innerHTML = `<tr><td colspan="7" class="queue-empty-text">No residents found matching "${escapeHtml(filterText)}".</td></tr>`;
     return;
   }
 
   filtered.forEach((r) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><span class="resident-name">${r.name}</span> (${r.age || '28'} yrs)</td>
-      <td>${r.contact}</td>
-      <td>${r.zone || 'Zone 4'} · ${r.street || 'Mabini St.'}</td>
-      <td>${r.address}</td>
-      <td>${r.residencyDuration || '5 Years'}</td>
-      <td><span class="queue-badge">${r.appointmentCount || 1} booked</span></td>
+      <td><span class="resident-name">${escapeHtml(r.name)}</span> (${escapeHtml(r.age || '28')} yrs)</td>
+      <td>${escapeHtml(r.contact)}</td>
+      <td>${escapeHtml(r.zone || 'Zone 4')} · ${escapeHtml(r.street || 'Mabini St.')}</td>
+      <td>${escapeHtml(r.address)}</td>
+      <td>${escapeHtml(r.residencyDuration || '5 Years')}</td>
+      <td><span class="queue-badge">${escapeHtml(r.appointmentCount || 1)} booked</span></td>
       <td>
         <div style="display:flex; gap:6px;">
-          <button type="button" class="btn-view-details" data-res-id="${r.id}">View Details</button>
-          <button type="button" class="btn-delete-row" data-res-id="${r.id}">Delete</button>
+          <button type="button" class="btn-view-details" data-res-id="${escapeHtml(r.id)}">View Details</button>
+          <button type="button" class="btn-delete-row" data-res-id="${escapeHtml(r.id)}">Delete</button>
         </div>
       </td>
     `;
@@ -1325,11 +1370,11 @@ if (btnSearchResidents && residentSearchInput) {
 }
 
 // Staff presence list and toggle
-function renderStaffAttendance() {
+function renderStaffAttendance(staffList = null) {
   const container = document.getElementById('staffAttendanceList');
   if (!container) return;
 
-  const staff = getStorageItem('lb_staff', DEFAULT_STAFF);
+  const staff = staffList || getStorageItem('lb_staff', DEFAULT_STAFF);
   container.innerHTML = '';
 
   staff.forEach((st) => {
@@ -1337,15 +1382,15 @@ function renderStaffAttendance() {
     card.className = 'staff-item-card';
     card.innerHTML = `
       <div class="staff-info">
-        <h4>${st.name}</h4>
-        <p>${st.position}</p>
+        <h4>${escapeHtml(st.name)}</h4>
+        <p>${escapeHtml(st.position)}</p>
       </div>
       <div class="staff-actions">
         <label class="switch">
-          <input type="checkbox" class="staff-presence-toggle" data-staff-id="${st.id}" ${st.present ? 'checked' : ''}>
+          <input type="checkbox" class="staff-presence-toggle" data-staff-id="${escapeHtml(st.id)}" ${st.present ? 'checked' : ''}>
           <span class="slider"></span>
         </label>
-        <button type="button" class="btn-delete-row" data-staff-id="${st.id}">Remove</button>
+        <button type="button" class="btn-delete-row" data-staff-id="${escapeHtml(st.id)}">Remove</button>
       </div>
     `;
     container.appendChild(card);
@@ -1377,10 +1422,16 @@ const addStaffForm = document.getElementById('addStaffForm');
 if (addStaffForm) {
   addStaffForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const submitBtn = document.getElementById('btnAddStaffSubmit');
+    if (submitBtn) submitBtn.disabled = true;
+
     const name = document.getElementById('staffFullNameInput')?.value.trim();
     const position = document.getElementById('staffPositionInput')?.value.trim();
 
-    if (!name || !position) return;
+    if (!name || !position) {
+      if (submitBtn) submitBtn.disabled = false;
+      return;
+    }
 
     const staff = getStorageItem('lb_staff', DEFAULT_STAFF);
     staff.push({
@@ -1393,17 +1444,18 @@ if (addStaffForm) {
     setStorageItem('lb_staff', staff);
     renderStaffAttendance();
     addStaffForm.reset();
+    if (submitBtn) submitBtn.disabled = false;
   });
 }
 
 // Resident problem & incident reports management in admin dashboard
 let currentViewingReportId = null;
 
-function renderAdminReports() {
+function renderAdminReports(reportsList = null) {
   const tableBody = document.getElementById('adminReportsTableBody');
   if (!tableBody) return;
 
-  const reports = getStorageItem('lb_reports', DEFAULT_REPORTS);
+  const reports = reportsList || getStorageItem('lb_reports', DEFAULT_REPORTS);
   const searchInput = document.getElementById('reportSearchInput');
   const catFilter = document.getElementById('reportCategoryFilter');
   const statusFilter = document.getElementById('reportStatusFilter');
@@ -1462,18 +1514,18 @@ function renderAdminReports() {
     const tr = document.createElement('tr');
 
     tr.innerHTML = `
-      <td><span class="report-id-badge">${rpt.id}</span></td>
-      <td><span style="font-size:12.5px; color:#526759; white-space:nowrap;">${rpt.date || 'Recent'}</span></td>
-      <td><span class="report-cat-badge">${rpt.category}</span></td>
+      <td><span class="report-id-badge">${escapeHtml(rpt.id)}</span></td>
+      <td><span style="font-size:12.5px; color:#526759; white-space:nowrap;">${escapeHtml(rpt.date || 'Recent')}</span></td>
+      <td><span class="report-cat-badge">${escapeHtml(rpt.category)}</span></td>
       <td>
         <div class="report-cell-subject">
-          <strong>${rpt.subject}</strong>
-          <p class="report-cell-snippet">${rpt.details}</p>
+          <strong>${escapeHtml(rpt.subject)}</strong>
+          <p class="report-cell-snippet">${escapeHtml(rpt.details)}</p>
         </div>
       </td>
-      <td><span style="font-size:13px; font-weight:600; color:#234832;">${rpt.contact || 'N/A'}</span></td>
+      <td><span style="font-size:13px; font-weight:600; color:#234832;">${escapeHtml(rpt.contact || 'N/A')}</span></td>
       <td>
-        <select class="admin-status-dropdown report-status-select" data-report-id="${rpt.id}">
+        <select class="admin-status-dropdown report-status-select" data-report-id="${escapeHtml(rpt.id)}">
           <option value="Under Review by Barangay Staff" ${(rpt.status || '').includes('Review') ? 'selected' : ''}>In Review</option>
           <option value="In Progress — Action Initiated" ${(rpt.status || '').includes('Progress') ? 'selected' : ''}>In Progress</option>
           <option value="Resolved — Corrective Action Completed" ${(rpt.status || '').includes('Resolved') ? 'selected' : ''}>Resolved</option>
@@ -1482,8 +1534,8 @@ function renderAdminReports() {
       </td>
       <td>
         <div style="display:flex; gap:6px;">
-          <button type="button" class="btn-view-details btn-view-report" data-report-id="${rpt.id}">View</button>
-          <button type="button" class="btn-delete-row btn-delete-report" data-report-id="${rpt.id}">Delete</button>
+          <button type="button" class="btn-view-details btn-view-report" data-report-id="${escapeHtml(rpt.id)}">View</button>
+          <button type="button" class="btn-delete-row btn-delete-report" data-report-id="${escapeHtml(rpt.id)}">Delete</button>
         </div>
       </td>
     `;

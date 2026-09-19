@@ -33,17 +33,17 @@
     <div class="admin-login-error" id="adminLoginError" role="alert" style="display: none;"></div>
 
     <form id="adminLoginForm" novalidate>
+      <input type="hidden" name="csrf_token" value="" class="csrf-token-input">
       <div class="admin-field-group">
         <label for="adminUsername" class="admin-field-label">Admin ID</label>
         <input
           id="adminUsername"
-          name="adminUsername"
+          name="username"
           type="text"
           class="admin-field-input"
           placeholder=""
           required
           autocomplete="username"
-          value="admin"
         >
       </div>
 
@@ -51,13 +51,12 @@
         <label for="adminPassword" class="admin-field-label">Password</label>
         <input
           id="adminPassword"
-          name="adminPassword"
+          name="password"
           type="password"
           class="admin-field-input"
           placeholder=""
           required
           autocomplete="current-password"
-          value="admin123"
         >
       </div>
 

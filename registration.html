@@ -31,6 +31,7 @@
     </div>
 
     <form id="registerForm" novalidate>
+      <input type="hidden" name="csrf_token" value="" class="csrf-token-input">
       <div class="form-row-2">
         <div class="field">
           <label for="fullName">Full Name</label>
@@ -81,7 +82,7 @@
         <div class="field">
           <label for="contact">Contact Number</label>
           <div class="input-wrap">
-            <input id="contact" name="contact" type="tel" placeholder="Ex. 09171234567" required autocomplete="tel">
+            <input id="contact" name="contact" type="tel" placeholder="Ex. 09171234567" pattern="^(09|\+639)\d{9}$" maxlength="13" required autocomplete="tel">
           </div>
         </div>
       </div>
@@ -109,11 +110,11 @@
       </div>
 
       <div class="agree-row">
-        <input type="checkbox" id="agreeTerms" required>
+        <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
         <label for="agreeTerms">I agree to share my information with regards to the <button type="button" id="openPrivacyModal" class="privacy-link-btn">Privacy and Policy</button> of this site.</label>
       </div>
 
-      <button type="submit" class="btn-proceed btn-register">Register Now</button>
+      <button type="submit" class="btn-proceed btn-register" id="btnSubmitRegister">Register Now</button>
     </form>
 
     <div class="register-line">Already have an account? <a href="index.html" class="register-link">Login here</a></div>
