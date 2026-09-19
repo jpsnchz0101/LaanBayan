@@ -61,12 +61,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: clamp(36px, 4.5vw, 68px);
+  gap: clamp(32px, 4vw, 56px);
   max-width: 1260px;
   width: 100%;
   margin: 0 auto;
   padding: 32px 36px 16px;
-  flex: 1;
+  flex: 1 1 auto;
 }
 
 .hero-text-block {
@@ -893,41 +893,72 @@ footer {
   margin-top: 40px;
 }
 
-/* Mobile layout adjustments */
+/* Tablet and mobile layout adjustments */
+@media (max-width: 1024px) {
+  .hero-content {
+    gap: 32px;
+    padding: 24px 28px;
+  }
+}
+
 @media (max-width: 900px) {
   .nav-inner {
-    padding: 16px 24px;
+    padding: 14px 20px;
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 12px;
   }
 
   .nav-inner nav ul {
-    gap: 22px;
+    gap: 18px;
   }
 
   .hero-section {
     min-height: auto;
+    justify-content: flex-start;
   }
 
   .hero-content {
     flex-direction: column;
-    padding: 50px 24px 60px;
+    justify-content: center;
+    align-items: center;
+    padding: 28px 20px 24px;
     text-align: center;
+    gap: 24px;
+    flex: 0 1 auto;
+  }
+
+  .hero-text-block {
+    flex: 0 1 auto;
+    max-width: 600px;
+  }
+
+  .headline {
+    font-size: clamp(34px, 5.5vw, 48px);
+    margin-bottom: 12px;
   }
 
   .hero-sub {
     max-width: 100%;
+    font-size: 15.5px;
+    line-height: 1.55;
+    margin-bottom: 18px;
   }
 
   .feature-row {
     justify-content: center;
+    gap: 10px 12px;
   }
 
   .resident-login-card {
     width: 100%;
-    max-width: 380px;
-    padding: 28px 22px 24px;
-    border-radius: 14px;
+    max-width: 420px;
+    padding: 26px 22px 22px;
+    border-radius: 16px;
+    margin-top: 4px;
+  }
+
+  .scroll-down-container {
+    padding: 8px 20px 20px;
   }
 
   .about-section {

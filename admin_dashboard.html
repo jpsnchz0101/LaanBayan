@@ -53,6 +53,11 @@
         <img src="assets/icons/check.svg" width="20" height="20" alt="Staff Attendance">
         <span>Staff Attendance</span>
       </a>
+
+      <a href="#" class="sidebar-link" data-admin-page="reports" title="Resident Reports &amp; Concerns">
+        <img src="assets/icons/message.svg" width="20" height="20" alt="Resident Reports">
+        <span>Resident Reports</span>
+      </a>
     </nav>
 
     <div class="sidebar-bottom">
@@ -382,6 +387,68 @@
         </div>
       </section>
 
+      <!-- Tab 5: Resident Problem & Incident Reports -->
+      <section class="admin-section" data-section="reports">
+        <div class="admin-card">
+          <div class="reports-header-row">
+            <div>
+              <h2 class="admin-card-title">Resident Problem &amp; Incident Reports</h2>
+              <p class="admin-card-subtitle">Track, review, and resolve concerns and feedback submitted by residents.</p>
+            </div>
+            <div class="reports-stats-summary" id="reportsStatsSummary">
+              <span class="report-stat-chip total">Total: <strong id="reportCountTotal">0</strong></span>
+              <span class="report-stat-chip pending">In Review: <strong id="reportCountPending">0</strong></span>
+              <span class="report-stat-chip in-progress">In Progress: <strong id="reportCountProgress">0</strong></span>
+              <span class="report-stat-chip resolved">Resolved: <strong id="reportCountResolved">0</strong></span>
+            </div>
+          </div>
+
+          <!-- Filter & Search toolbar -->
+          <div class="reports-toolbar">
+            <div class="reports-search-wrap">
+              <input type="text" id="reportSearchInput" class="search-input" placeholder="Search by report ID, subject, details, or contact...">
+            </div>
+            <div class="reports-filter-wrap">
+              <select id="reportCategoryFilter" class="admin-select-filter">
+                <option value="all">All Categories</option>
+                <option value="Queue & Waiting Time">Queue &amp; Waiting Time</option>
+                <option value="Document Requirements Error">Document / Info Error</option>
+                <option value="Facility & Cleanliness">Facility / Hall Issue</option>
+                <option value="Staff Assistance">Staff Assistance</option>
+                <option value="Portal / System Technical Bug">Website / Bug</option>
+                <option value="Other Concerns">Other Concerns</option>
+              </select>
+              <select id="reportStatusFilter" class="admin-select-filter">
+                <option value="all">All Statuses</option>
+                <option value="In Review">In Review</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Reports table -->
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Report ID</th>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Subject &amp; Details</th>
+                  <th>Contact</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminReportsTableBody">
+                <!-- Rows populated by script.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </div>
   </main>
 
@@ -461,6 +528,61 @@
 
     <div class="modal-footer">
       <button type="button" class="btn-admin-primary" id="btnModalCloseDone">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal dialog showing resident problem report details and actions -->
+<div class="modal-overlay" id="reportDetailModal" role="dialog" aria-modal="true" aria-labelledby="modalReportTitle">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="modalReportTitle">Resident Problem Report</h3>
+      <button type="button" class="modal-close" id="btnCloseReportModal" aria-label="Close report modal">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="report-modal-header-card">
+        <div class="report-modal-badge-row">
+          <span class="report-id-pill" id="modalReportId">RPT-1042</span>
+          <span class="report-cat-badge" id="modalReportCategory">Queue &amp; Waiting Time</span>
+          <span class="report-date-text" id="modalReportDate">Today</span>
+        </div>
+        <h4 class="report-modal-subject" id="modalReportSubject">Window 2 verification was slow</h4>
+      </div>
+
+      <div class="detail-section-title">Report Description</div>
+      <div class="report-modal-desc-box" id="modalReportDetails">
+        The verification queue halted for 30 minutes due to system reconnection.
+      </div>
+
+      <div class="detail-grid" style="margin-top: 14px;">
+        <div class="detail-item">
+          <span class="lbl">Resident Contact</span>
+          <span class="val" id="modalReportContact">09171234567</span>
+        </div>
+        <div class="detail-item">
+          <span class="lbl">Current Status</span>
+          <span class="val" id="modalReportStatus">In Review by Barangay Staff</span>
+        </div>
+      </div>
+
+      <div class="report-status-update-box">
+        <label class="lbl" for="modalReportStatusSelect" style="display:block; margin-bottom:6px; font-weight:700; color:#234832;">Update Resolution Status:</label>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <select id="modalReportStatusSelect" class="admin-select-filter" style="flex:1;">
+            <option value="Under Review by Barangay Staff">Under Review by Barangay Staff</option>
+            <option value="In Progress — Action Initiated">In Progress — Action Initiated</option>
+            <option value="Resolved — Corrective Action Completed">Resolved — Corrective Action Completed</option>
+            <option value="Closed / Noted">Closed / Noted</option>
+          </select>
+          <button type="button" class="btn-admin-primary" id="btnSaveReportStatus">Update Status</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-delete-row" id="btnDeleteCurrentReport" style="margin-right:auto;">Delete Report</button>
+      <button type="button" class="btn-admin-primary" id="btnCloseReportModalBtn">Done</button>
     </div>
   </div>
 </div>

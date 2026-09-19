@@ -776,38 +776,91 @@
 }
 
 .report-history-item {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 14px;
-  padding: 14px 18px;
-  border: 1px solid rgba(45, 90, 63, 0.1);
+  padding: 16px 18px;
+  border: 1px solid rgba(45, 90, 63, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.report-history-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.report-history-item h4 {
+.report-history-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.report-id-pill {
   font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
+  font-weight: 800;
+  font-size: 11.5px;
+  background-color: var(--dash-green);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 8px;
+  letter-spacing: 0.3px;
+}
+
+.report-cat-badge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #2e4435;
+  background-color: #f2f5f0;
+  border: 1px solid #dce4da;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.report-date-text {
+  font-size: 11.5px;
+  color: #728477;
+  font-style: italic;
+}
+
+.report-history-body {
+  width: 100%;
+}
+
+.report-history-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--dash-green);
-  margin-bottom: 3px;
+  margin: 0 0 4px;
+  line-height: 1.35;
 }
 
-.report-history-item p {
-  font-size: 12.5px;
-  color: var(--text-gray);
+.report-history-desc {
+  font-size: 13px;
+  color: #3b4e41;
+  line-height: 1.5;
+  margin: 0;
+  word-break: break-word;
 }
 
 .report-status-badge {
   font-family: 'DM Sans', sans-serif;
   font-size: 11.5px;
   font-weight: 700;
-  padding: 5px 10px;
+  padding: 4px 10px;
   border-radius: 20px;
   background-color: rgba(233, 192, 121, 0.45);
   color: #7a5f1e;
   white-space: nowrap;
+  border: 1px solid rgba(233, 192, 121, 0.7);
 }
 
 /* Mobile sidebar overlay & topbar styles */
@@ -901,6 +954,33 @@
 }
 
 @media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+  }
+
+  .app-shell {
+    height: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+  }
+
+  .dash-main {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+  }
+
   .sidebar-overlay {
     display: block;
   }
@@ -940,13 +1020,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 18px;
+    padding: 10px 16px;
     background-color: var(--green-dark);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     position: sticky;
     top: 0;
-    z-index: 90;
-    box-shadow: 0 2px 12px rgba(18, 38, 25, 0.2);
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 950;
+    box-shadow: 0 2px 14px rgba(18, 38, 25, 0.25);
+    flex-shrink: 0;
+    box-sizing: border-box;
   }
 
   .mobile-menu-btn {

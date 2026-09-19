@@ -148,8 +148,26 @@ const DEFAULT_REPORTS = [
     subject: 'Window 2 verification was slow during morning peak',
     details: 'The verification queue halted for 30 minutes due to system reconnection.',
     contact: '09171234567',
-    date: 'Today',
+    date: 'Sep 18, 2026',
     status: 'In Review by Barangay Staff'
+  },
+  {
+    id: 'RPT-1039',
+    category: 'Portal / System Technical Bug',
+    subject: 'Time slot selection dropdown did not load on mobile Safari',
+    details: 'The afternoon slot button was unresponsive when booking on iOS 16 mobile browser.',
+    contact: '09955178593',
+    date: 'Sep 17, 2026',
+    status: 'In Progress — Action Initiated'
+  },
+  {
+    id: 'RPT-1025',
+    category: 'Facility & Cleanliness',
+    subject: 'Waiting area water dispenser was empty',
+    details: 'Residents waiting in line during afternoon had no potable drinking water.',
+    contact: '09189876543',
+    date: 'Sep 16, 2026',
+    status: 'Resolved — Corrective Action Completed'
   }
 ];
 
@@ -830,12 +848,18 @@ function renderProblemReports() {
     const item = document.createElement('div');
     item.className = 'report-history-item';
     item.innerHTML = `
-      <div>
-        <h4>[${rpt.id}] ${rpt.subject}</h4>
-        <p><strong>Category:</strong> ${rpt.category} · <em>${rpt.date}</em></p>
-        <p style="margin-top:4px;">${rpt.details}</p>
+      <div class="report-history-header">
+        <div class="report-history-meta">
+          <span class="report-id-pill">${rpt.id}</span>
+          <span class="report-cat-badge">${rpt.category}</span>
+          <span class="report-date-text">${rpt.date || 'Today'}</span>
+        </div>
+        <span class="report-status-badge">${rpt.status}</span>
       </div>
-      <span class="report-status-badge">${rpt.status}</span>
+      <div class="report-history-body">
+        <h4 class="report-history-title">${rpt.subject}</h4>
+        <p class="report-history-desc">${rpt.details}</p>
+      </div>
     `;
     feed.appendChild(item);
   });
@@ -1372,6 +1396,212 @@ if (addStaffForm) {
   });
 }
 
+// Resident problem & incident reports management in admin dashboard
+let currentViewingReportId = null;
+
+function renderAdminReports() {
+  const tableBody = document.getElementById('adminReportsTableBody');
+  if (!tableBody) return;
+
+  const reports = getStorageItem('lb_reports', DEFAULT_REPORTS);
+  const searchInput = document.getElementById('reportSearchInput');
+  const catFilter = document.getElementById('reportCategoryFilter');
+  const statusFilter = document.getElementById('reportStatusFilter');
+
+  const searchText = (searchInput?.value || '').toLowerCase().trim();
+  const selectedCat = catFilter?.value || 'all';
+  const selectedStatus = statusFilter?.value || 'all';
+
+  // Calculate summary counts
+  const totalCount = reports.length;
+  const pendingCount = reports.filter(r => (r.status || '').toLowerCase().includes('review') || (r.status || '').toLowerCase().includes('pending')).length;
+  const progressCount = reports.filter(r => (r.status || '').toLowerCase().includes('progress')).length;
+  const resolvedCount = reports.filter(r => (r.status || '').toLowerCase().includes('resolve') || (r.status || '').toLowerCase().includes('close')).length;
+
+  const countTotalEl = document.getElementById('reportCountTotal');
+  const countPendingEl = document.getElementById('reportCountPending');
+  const countProgressEl = document.getElementById('reportCountProgress');
+  const countResolvedEl = document.getElementById('reportCountResolved');
+
+  if (countTotalEl) countTotalEl.textContent = totalCount;
+  if (countPendingEl) countPendingEl.textContent = pendingCount;
+  if (countProgressEl) countProgressEl.textContent = progressCount;
+  if (countResolvedEl) countResolvedEl.textContent = resolvedCount;
+
+  // Filter reports
+  const filtered = reports.filter(r => {
+    const matchSearch = !searchText ||
+      (r.id || '').toLowerCase().includes(searchText) ||
+      (r.subject || '').toLowerCase().includes(searchText) ||
+      (r.details || '').toLowerCase().includes(searchText) ||
+      (r.contact || '').toLowerCase().includes(searchText) ||
+      (r.category || '').toLowerCase().includes(searchText);
+
+    const matchCat = selectedCat === 'all' || r.category === selectedCat;
+
+    let matchStatus = true;
+    if (selectedStatus === 'In Review') {
+      matchStatus = (r.status || '').toLowerCase().includes('review') || (r.status || '').toLowerCase().includes('pending');
+    } else if (selectedStatus === 'In Progress') {
+      matchStatus = (r.status || '').toLowerCase().includes('progress');
+    } else if (selectedStatus === 'Resolved') {
+      matchStatus = (r.status || '').toLowerCase().includes('resolve') || (r.status || '').toLowerCase().includes('close');
+    }
+
+    return matchSearch && matchCat && matchStatus;
+  });
+
+  tableBody.innerHTML = '';
+
+  if (!filtered.length) {
+    tableBody.innerHTML = `<tr><td colspan="7" class="queue-empty-text">No reports found matching criteria.</td></tr>`;
+    return;
+  }
+
+  filtered.forEach(rpt => {
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+      <td><span class="report-id-badge">${rpt.id}</span></td>
+      <td><span style="font-size:12.5px; color:#526759; white-space:nowrap;">${rpt.date || 'Recent'}</span></td>
+      <td><span class="report-cat-badge">${rpt.category}</span></td>
+      <td>
+        <div class="report-cell-subject">
+          <strong>${rpt.subject}</strong>
+          <p class="report-cell-snippet">${rpt.details}</p>
+        </div>
+      </td>
+      <td><span style="font-size:13px; font-weight:600; color:#234832;">${rpt.contact || 'N/A'}</span></td>
+      <td>
+        <select class="admin-status-dropdown report-status-select" data-report-id="${rpt.id}">
+          <option value="Under Review by Barangay Staff" ${(rpt.status || '').includes('Review') ? 'selected' : ''}>In Review</option>
+          <option value="In Progress — Action Initiated" ${(rpt.status || '').includes('Progress') ? 'selected' : ''}>In Progress</option>
+          <option value="Resolved — Corrective Action Completed" ${(rpt.status || '').includes('Resolved') ? 'selected' : ''}>Resolved</option>
+          <option value="Closed / Noted" ${(rpt.status || '').includes('Closed') ? 'selected' : ''}>Closed</option>
+        </select>
+      </td>
+      <td>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-view-details btn-view-report" data-report-id="${rpt.id}">View</button>
+          <button type="button" class="btn-delete-row btn-delete-report" data-report-id="${rpt.id}">Delete</button>
+        </div>
+      </td>
+    `;
+    tableBody.appendChild(tr);
+  });
+
+  // Handle in-row status change
+  tableBody.querySelectorAll('.report-status-select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const rId = sel.dataset.reportId;
+      const newStatus = sel.value;
+      const allRpts = getStorageItem('lb_reports', DEFAULT_REPORTS);
+      const target = allRpts.find(r => r.id === rId);
+      if (target) {
+        target.status = newStatus;
+        setStorageItem('lb_reports', allRpts);
+        renderAdminReports();
+      }
+    });
+  });
+
+  // Handle View button
+  tableBody.querySelectorAll('.btn-view-report').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const rId = btn.dataset.reportId;
+      openReportDetailsModal(rId);
+    });
+  });
+
+  // Handle Delete button
+  tableBody.querySelectorAll('.btn-delete-report').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const rId = btn.dataset.reportId;
+      const updated = getStorageItem('lb_reports', DEFAULT_REPORTS).filter(r => r.id !== rId);
+      setStorageItem('lb_reports', updated);
+      renderAdminReports();
+    });
+  });
+}
+
+function openReportDetailsModal(reportId) {
+  const modal = document.getElementById('reportDetailModal');
+  if (!modal) return;
+
+  const reports = getStorageItem('lb_reports', DEFAULT_REPORTS);
+  const rpt = reports.find(r => r.id === reportId);
+  if (!rpt) return;
+
+  currentViewingReportId = reportId;
+
+  document.getElementById('modalReportId').textContent = rpt.id;
+  document.getElementById('modalReportCategory').textContent = rpt.category;
+  document.getElementById('modalReportDate').textContent = rpt.date || 'Recent';
+  document.getElementById('modalReportSubject').textContent = rpt.subject;
+  document.getElementById('modalReportDetails').textContent = rpt.details;
+  document.getElementById('modalReportContact').textContent = rpt.contact || 'N/A';
+  document.getElementById('modalReportStatus').textContent = rpt.status;
+
+  const statusSel = document.getElementById('modalReportStatusSelect');
+  if (statusSel) {
+    statusSel.value = rpt.status;
+  }
+
+  modal.classList.add('active');
+}
+
+function closeReportDetailsModal() {
+  const modal = document.getElementById('reportDetailModal');
+  if (modal) modal.classList.remove('active');
+  currentViewingReportId = null;
+}
+
+// Modal actions wiring
+const btnCloseReportModal = document.getElementById('btnCloseReportModal');
+const btnCloseReportModalBtn = document.getElementById('btnCloseReportModalBtn');
+const btnSaveReportStatus = document.getElementById('btnSaveReportStatus');
+const btnDeleteCurrentReport = document.getElementById('btnDeleteCurrentReport');
+
+if (btnCloseReportModal) btnCloseReportModal.addEventListener('click', closeReportDetailsModal);
+if (btnCloseReportModalBtn) btnCloseReportModalBtn.addEventListener('click', closeReportDetailsModal);
+
+if (btnSaveReportStatus) {
+  btnSaveReportStatus.addEventListener('click', () => {
+    if (!currentViewingReportId) return;
+    const newStatus = document.getElementById('modalReportStatusSelect')?.value;
+    if (!newStatus) return;
+
+    const reports = getStorageItem('lb_reports', DEFAULT_REPORTS);
+    const target = reports.find(r => r.id === currentViewingReportId);
+    if (target) {
+      target.status = newStatus;
+      setStorageItem('lb_reports', reports);
+      const curStatusEl = document.getElementById('modalReportStatus');
+      if (curStatusEl) curStatusEl.textContent = newStatus;
+      renderAdminReports();
+    }
+  });
+}
+
+if (btnDeleteCurrentReport) {
+  btnDeleteCurrentReport.addEventListener('click', () => {
+    if (!currentViewingReportId) return;
+    const updated = getStorageItem('lb_reports', DEFAULT_REPORTS).filter(r => r.id !== currentViewingReportId);
+    setStorageItem('lb_reports', updated);
+    closeReportDetailsModal();
+    renderAdminReports();
+  });
+}
+
+// Search and filter listeners for reports tab
+const reportSearchInput = document.getElementById('reportSearchInput');
+const reportCategoryFilter = document.getElementById('reportCategoryFilter');
+const reportStatusFilter = document.getElementById('reportStatusFilter');
+
+if (reportSearchInput) reportSearchInput.addEventListener('input', renderAdminReports);
+if (reportCategoryFilter) reportCategoryFilter.addEventListener('change', renderAdminReports);
+if (reportStatusFilter) reportStatusFilter.addEventListener('change', renderAdminReports);
+
 // Initial render for admin tables and controls
 renderAdminLiveAppointments();
 renderServiceAvailabilityControl();
@@ -1379,3 +1609,4 @@ renderAdminAnnouncements();
 renderResidentDirectory();
 renderCompletedAndCancelled();
 renderStaffAttendance();
+renderAdminReports();
