@@ -36,53 +36,62 @@
         <div class="field">
           <label for="fullName">Full Name</label>
           <div class="input-wrap">
-            <input id="fullName" name="fullName" type="text" placeholder="Ex. Juan Dela Cruz" required autocomplete="name">
+            <input id="fullName" name="fullName" type="text" placeholder="Juan Dela Cruz" required autocomplete="name">
           </div>
         </div>
 
         <div class="field">
           <label for="age">Age</label>
           <div class="input-wrap">
-            <input id="age" name="age" type="number" min="1" max="130" placeholder="Ex. 28" required>
+            <input id="age" name="age" type="number" min="1" max="130" placeholder="28" required>
           </div>
         </div>
       </div>
 
-      <div class="field">
-        <label for="address">Address (House / Bldg / Lot No.)</label>
-        <div class="input-wrap">
-          <input id="address" name="address" type="text" placeholder="Ex. #14 Dahlia St., Purok 3" required autocomplete="street-address">
-        </div>
-      </div>
-
       <div class="form-row-2">
+        <div class="field">
+          <label for="address">Address (House / Bldg / Lot No.)</label>
+          <div class="input-wrap">
+            <input id="address" name="address" type="text" placeholder="#14 Dahlia St., Purok 3" required autocomplete="street-address">
+          </div>
+        </div>
+
         <div class="field">
           <label for="zone">Zone</label>
           <div class="input-wrap">
-            <input id="zone" name="zone" type="text" placeholder="Ex. Zone 3" required>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="street">Street</label>
-          <div class="input-wrap">
-            <input id="street" name="street" type="text" placeholder="Ex. Mabini St." required>
+            <input id="zone" name="zone" type="text" placeholder="Zone 3" required>
           </div>
         </div>
       </div>
 
       <div class="form-row-2">
         <div class="field">
-          <label for="residencyDuration">Year(s) / Months of Residency</label>
+          <label for="street">Street</label>
           <div class="input-wrap">
-            <input id="residencyDuration" name="residencyDuration" type="text" placeholder="Ex. 5 Years, 3 Months" required>
+            <input id="street" name="street" type="text" placeholder="Mabini St." required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="residencyDuration">Residency Duration</label>
+          <div class="input-wrap">
+            <input id="residencyDuration" name="residencyDuration" type="text" placeholder="5 Years, 3 Months" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="field">
+          <label for="email">Email Address</label>
+          <div class="input-wrap">
+            <input id="email" name="email" type="email" placeholder="juan.delacruz@gmail.com" required autocomplete="email">
           </div>
         </div>
 
         <div class="field">
           <label for="contact">Contact Number</label>
           <div class="input-wrap">
-            <input id="contact" name="contact" type="tel" placeholder="Ex. 09171234567" pattern="^(09|\+639)\d{9}$" maxlength="13" required autocomplete="tel">
+            <input id="contact" name="contact" type="tel" placeholder="09171234567" pattern="^(09|\+639)\d{9}$" maxlength="13" required autocomplete="tel">
           </div>
         </div>
       </div>

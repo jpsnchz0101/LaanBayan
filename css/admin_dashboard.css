@@ -301,14 +301,13 @@
   width: 100%;
 }
 
-/* Admin cards with top border highlight */
+/* Admin cards */
 .admin-card {
   background: #ffffff;
   border-radius: 16px;
   padding: 26px 28px;
-  box-shadow: 0 8px 24px rgba(33, 56, 36, 0.08);
-  border: 1px solid rgba(47, 77, 51, 0.16);
-  border-top: 4px solid var(--green-dark);
+  box-shadow: 0 4px 16px rgba(33, 56, 36, 0.05);
+  border: 1px solid rgba(47, 77, 51, 0.08);
   min-width: 0;
   max-width: 100%;
   width: 100%;
@@ -351,8 +350,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  border-left: 4px solid var(--gold);
-  padding-left: 10px;
 }
 
 .queue-subgroup-title span.count {
@@ -669,8 +666,7 @@ input:checked + .slider:before {
 
 .stat-box {
   background-color: var(--green-soft);
-  border: 1px solid rgba(47, 77, 51, 0.16);
-  border-left: 4px solid var(--gold);
+  border: 1px solid rgba(47, 77, 51, 0.12);
   border-radius: 12px;
   padding: 14px 16px;
 }

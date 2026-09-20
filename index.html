@@ -26,7 +26,6 @@
     <nav>
       <ul>
         <li><a href="#home">Home</a></li>
-        <li><a href="#about">Purpose</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
@@ -63,13 +62,13 @@
       <form id="loginForm" novalidate>
         <input type="hidden" name="csrf_token" value="" class="csrf-token-input">
         <div class="resident-field-group">
-          <label for="brgy-id" class="resident-field-label">Contact Number or Resident Name</label>
+          <label for="brgy-id" class="resident-field-label">Email or Contact Number</label>
           <input
             id="brgy-id"
             name="brgy-id"
             type="text"
             class="resident-field-input"
-            placeholder="e.g. 09171234567 or Juan Dela Cruz"
+            placeholder="juan@gmail.com or 09171234567"
             required
             autocomplete="username"
           >
@@ -118,7 +117,7 @@
 
   <!-- Downward arrow indicator prompting users to explore below -->
   <div class="scroll-down-container">
-    <a href="#about" class="scroll-down-btn" id="scrollDownBtn" aria-label="Explore barangay services and purpose">
+    <a href="#services" class="scroll-down-btn" id="scrollDownBtn" aria-label="Explore barangay services">
       <span class="scroll-text">Explore LaanBayan</span>
       <div class="scroll-arrow-circle" aria-hidden="true">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -130,22 +129,6 @@
 </div>
 
 <div class="scroll-content">
-
-  <section class="about-section" id="about">
-    <div class="about">
-      <h2 class="about-heading">Built to cut down on wasted trips.</h2>
-
-      <div class="about-grid">
-        <div>
-          <h3>Mission &amp; Purpose</h3>
-          <p>Laan Bayan is a barangay appointment and service availability system built to cut down on wasted trips and long walk-in lines. Residents can check what services are open, book a time slot, and track their place in the queue from anywhere &mdash; no more guessing whether the office is even open today.</p>
-          <h3>What we're solving</h3>
-          <p>Long unplanned queues at the barangay hall, unclear service hours, and no way to know ahead of time whether a request can even be processed that day.</p>
-        </div>
-        <img class="about-img" src="assets/png/ugac.png" alt="Barangay Ugac No seal">
-      </div>
-    </div>
-  </section>
 
   <section class="services-section" id="services">
     <div class="services-wrapper">
@@ -338,7 +321,7 @@
             <span class="faq-toggle-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer">
-            <p>Log in with your contact number or resident name using the portal. Once logged in, select your requested service (e.g., Barangay Clearance or Certificate of Residency), check the list of requirements, choose your preferred date and time slot (morning or afternoon), and click confirm. You will receive an instant digital appointment pass with your queue number.</p>
+            <p>Log in with your email or contact number using the portal. Once logged in, select your requested service (such as Barangay Clearance or Certificate of Residency), check the list of requirements, choose your preferred date and time slot (morning or afternoon), and click confirm. You will receive an instant digital appointment pass with your queue number.</p>
           </div>
         </div>
 
@@ -407,7 +390,6 @@
         <h4>QUICK LINKS:</h4>
         <ul>
           <li><a href="#home">Home</a></li>
-          <li><a href="#about">Purpose</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#faq">FAQ</a></li>
         </ul>
