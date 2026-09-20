@@ -79,6 +79,7 @@ const DEFAULT_RESIDENTS = [
   {
     id: 'res_1',
     name: 'Mark Macalintal',
+    email: 'mark.macalintal@gmail.com',
     age: '28',
     address: 'Purok 2, Barangay Ugac',
     zone: 'Zone 4',
@@ -90,6 +91,7 @@ const DEFAULT_RESIDENTS = [
   {
     id: 'res_2',
     name: 'Juan Dela Cruz',
+    email: 'juan.delacruz@gmail.com',
     age: '31',
     address: 'Purok 4, Barangay Ugac',
     zone: 'Zone 3',
@@ -101,6 +103,7 @@ const DEFAULT_RESIDENTS = [
   {
     id: 'res_3',
     name: 'Maria Santos',
+    email: 'maria.santos@gmail.com',
     age: '42',
     address: 'Purok 1, Barangay Ugac',
     zone: 'Zone 2',
@@ -112,6 +115,7 @@ const DEFAULT_RESIDENTS = [
   {
     id: 'res_4',
     name: 'Pedro Reyes',
+    email: 'pedro.reyes@gmail.com',
     age: '35',
     address: 'Purok 3, Barangay Ugac',
     zone: 'Zone 1',
@@ -322,14 +326,13 @@ if (registerForm) {
     e.preventDefault();
 
     const submitBtn = document.getElementById('btnSubmitRegister') || registerForm.querySelector('button[type="submit"]');
-    if (submitBtn) submitBtn.disabled = true;
-
     const fullName = document.getElementById('fullName')?.value.trim();
     const age = document.getElementById('age')?.value.trim();
     const address = document.getElementById('address')?.value.trim();
     const zone = document.getElementById('zone')?.value.trim();
     const street = document.getElementById('street')?.value.trim();
     const residencyDuration = document.getElementById('residencyDuration')?.value.trim();
+    const email = document.getElementById('email')?.value.trim();
     const contact = document.getElementById('contact')?.value.trim();
     const password = document.getElementById('regPassword')?.value;
     const confirmPassword = document.getElementById('confirmPassword')?.value;
@@ -340,41 +343,58 @@ if (registerForm) {
         registerError.textContent = 'Passwords do not match. Please verify.';
         registerError.hidden = false;
       }
-      if (submitBtn) submitBtn.disabled = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('btn-loading');
+      }
       return;
     }
 
-    if (!fullName || !contact || !password) {
+    if (!fullName || !email || !contact || !password) {
       if (registerError) {
         registerError.textContent = 'Please fill out all required fields.';
         registerError.hidden = false;
       }
-      if (submitBtn) submitBtn.disabled = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('btn-loading');
+      }
       return;
     }
 
-    const newUser = {
-      id: 'res_' + Date.now(),
-      name: fullName,
-      age: age,
-      address: address,
-      zone: zone,
-      street: street,
-      residencyDuration: residencyDuration,
-      contact: contact,
-      appointmentCount: 0
-    };
+    // Hide any previous error and trigger button loading spinner
+    if (registerError) registerError.hidden = true;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('btn-loading');
+    }
 
-    // Save as current user
-    setStorageItem('lb_current_user', newUser);
+    // Simulated async validation feedback
+    setTimeout(() => {
+      const newUser = {
+        id: 'res_' + Date.now(),
+        name: fullName,
+        email: email,
+        age: age,
+        address: address,
+        zone: zone,
+        street: street,
+        residencyDuration: residencyDuration,
+        contact: contact,
+        appointmentCount: 0
+      };
 
-    // Save to residents list
-    const residents = getStorageItem('lb_residents', DEFAULT_RESIDENTS);
-    residents.push(newUser);
-    setStorageItem('lb_residents', residents);
+      // Save as current user
+      setStorageItem('lb_current_user', newUser);
 
-    // Redirect to resident dashboard
-    window.location.href = 'dashb.html';
+      // Save to residents list
+      const residents = getStorageItem('lb_residents', DEFAULT_RESIDENTS);
+      residents.push(newUser);
+      setStorageItem('lb_residents', residents);
+
+      // Redirect to resident dashboard
+      window.location.href = 'dashb.html';
+    }, 700);
   });
 }
 
@@ -451,23 +471,40 @@ if (loginForm) {
   loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
     const submitBtn = document.getElementById('btnProceedLogin');
-    if (submitBtn) submitBtn.disabled = true;
 
     const loginInput = document.getElementById('loginUser') || document.getElementById('brgy-id');
     const loginUser = loginInput?.value.trim();
-    if (loginUser) {
+
+    if (!loginUser) {
+      if (loginInput) loginInput.focus();
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('btn-loading');
+    }
+
+    // Simulated async validation feedback
+    setTimeout(() => {
       const residents = getStorageItem('lb_residents', DEFAULT_RESIDENTS);
+      const cleanInput = loginUser.toLowerCase();
+      const cleanDigits = loginUser.replace(/\D/g, '');
+
       const matched = residents.find(r => 
-        (r.name && r.name.toLowerCase() === loginUser.toLowerCase()) || 
-        (r.contact && r.contact === loginUser) ||
-        (r.name && r.name.toLowerCase().includes(loginUser.toLowerCase()))
+        (r.email && r.email.toLowerCase() === cleanInput) ||
+        (r.contact && (r.contact === loginUser || (cleanDigits.length >= 7 && r.contact.replace(/\D/g, '').endsWith(cleanDigits)))) ||
+        (r.name && (r.name.toLowerCase() === cleanInput || r.name.toLowerCase().includes(cleanInput)))
       );
+
       if (matched) {
         setStorageItem('lb_current_user', matched);
       } else {
-        const isNumeric = /^\d+$/.test(loginUser.replace(/[-\s]/g, ''));
+        const isEmail = loginUser.includes('@');
+        const isNumeric = /^\d+$/.test(loginUser.replace(/[-\s+]/g, ''));
         const newUser = {
-          name: isNumeric ? 'Juan Dela Cruz' : loginUser,
+          name: isEmail ? loginUser.split('@')[0].replace(/[._]/g, ' ') : (isNumeric ? 'Juan Dela Cruz' : loginUser),
+          email: isEmail ? loginUser : '',
           contact: isNumeric ? loginUser : '09171234567',
           age: '28',
           address: 'Purok 4, Barangay Ugac',
@@ -477,8 +514,8 @@ if (loginForm) {
         };
         setStorageItem('lb_current_user', newUser);
       }
-    }
-    window.location.href = 'dashb.html';
+      window.location.href = 'dashb.html';
+    }, 650);
   });
 }
 
@@ -539,7 +576,6 @@ if (adminLoginForm) {
   adminLoginForm.addEventListener('submit', function (e) {
     e.preventDefault();
     const btn = document.getElementById('btnAdminLoginSubmit');
-    if (btn) btn.disabled = true;
 
     const username = document.getElementById('adminUsername')?.value.trim();
     const password = document.getElementById('adminPassword')?.value;
@@ -548,18 +584,28 @@ if (adminLoginForm) {
     // Basic client validation (verifies presence and length before backend session authorization)
     const isValid = Boolean(username && password && password.length >= 3);
 
-    if (isValid) {
-      if (errorEl) errorEl.style.display = 'none';
-      sessionStorage.setItem('lb_admin_logged_in', 'true');
-      sessionStorage.setItem('lb_admin_name', username || 'Barangay Official');
-      window.location.href = 'admin_dashboard.html';
-    } else {
-      if (errorEl) {
-        errorEl.textContent = 'Invalid administrator credentials. Please check your username and password.';
-        errorEl.style.display = 'block';
-      }
-      if (btn) btn.disabled = false;
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('btn-loading');
     }
+
+    setTimeout(() => {
+      if (isValid) {
+        if (errorEl) errorEl.style.display = 'none';
+        sessionStorage.setItem('lb_admin_logged_in', 'true');
+        sessionStorage.setItem('lb_admin_name', username || 'Barangay Official');
+        window.location.href = 'admin_dashboard.html';
+      } else {
+        if (errorEl) {
+          errorEl.textContent = 'Invalid administrator credentials. Please check your username and password.';
+          errorEl.style.display = 'block';
+        }
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('btn-loading');
+        }
+      }
+    }, 600);
   });
 }
 
@@ -765,6 +811,7 @@ if (bookingForm) {
     const newAppointment = {
       id: 'apt_' + Date.now(),
       name: currentUser.name,
+      email: currentUser.email || 'juan.delacruz@gmail.com',
       age: currentUser.age || '28',
       address: currentUser.address,
       zone: currentUser.zone || 'Zone 4',
@@ -1160,6 +1207,7 @@ function openAppointmentDetailsModal(aptId) {
   const zoneEl = document.getElementById('modalDetailZone');
   const streetEl = document.getElementById('modalDetailStreet');
   const residencyEl = document.getElementById('modalDetailResidency');
+  const emailEl = document.getElementById('modalDetailEmail');
   const contactEl = document.getElementById('modalDetailContact');
   const purposeEl = document.getElementById('modalDetailPurpose');
   const serviceEl = document.getElementById('modalDetailService');
@@ -1173,6 +1221,7 @@ function openAppointmentDetailsModal(aptId) {
   if (zoneEl) zoneEl.textContent = apt.zone || 'Zone 4';
   if (streetEl) streetEl.textContent = apt.street || 'Mabini St.';
   if (residencyEl) residencyEl.textContent = apt.residencyDuration || '5 Years';
+  if (emailEl) emailEl.textContent = apt.email || (apt.name ? `${apt.name.toLowerCase().replace(/\s+/g, '.')}@gmail.com` : 'resident@laanbayan.gov.ph');
   if (contactEl) contactEl.textContent = apt.contact || '09955178593';
   if (purposeEl) purposeEl.textContent = apt.purpose || 'None specified';
   if (serviceEl) serviceEl.textContent = apt.service;

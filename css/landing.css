@@ -222,13 +222,15 @@
   box-shadow: 0 10px 30px rgba(45, 55, 45, 0.06);
   border: 1px solid rgba(45, 90, 63, 0.08);
   flex-shrink: 0;
+  text-align: left;
 }
 
 .resident-card-brand {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .resident-logo-icon {
@@ -258,12 +260,14 @@
   color: #244b31;
   margin-bottom: 4px;
   letter-spacing: -0.3px;
+  text-align: center;
 }
 
 .resident-card-subtitle {
   font-size: 12.5px;
   color: #6b7280;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .resident-login-error {
@@ -275,10 +279,12 @@
   font-size: 12px;
   margin-bottom: 14px;
   line-height: 1.4;
+  text-align: left;
 }
 
 .resident-field-group {
   margin-bottom: 14px;
+  text-align: left;
 }
 
 .resident-field-label {
@@ -288,6 +294,7 @@
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 6px;
+  text-align: left;
 }
 
 .resident-field-input {
@@ -301,6 +308,7 @@
   font-size: 13.5px;
   color: #1f2937;
   outline: none;
+  text-align: left;
   transition: all 0.15s ease;
 }
 
@@ -659,47 +667,47 @@
 /* Interactive FAQ accordion styles */
 .faq-section {
   background-color: #ffffff;
-  padding: 80px 40px;
+  padding: 48px 30px;
 }
 
 .faq-container {
-  max-width: 860px;
+  max-width: 740px;
   margin: 0 auto;
 }
 
 .faq-heading {
   font-family: 'DM Sans', sans-serif;
   font-weight: 800;
-  font-size: 32px;
+  font-size: 24px;
   color: var(--green);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .faq-sub {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-gray);
-  margin-bottom: 36px;
-  line-height: 1.6;
+  margin-bottom: 22px;
+  line-height: 1.5;
 }
 
 .faq-accordion {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .faq-item {
   border: 1px solid rgba(47, 77, 51, 0.12);
-  border-radius: 14px;
+  border-radius: 10px;
   background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(47, 77, 51, 0.03);
+  box-shadow: 0 1px 4px rgba(47, 77, 51, 0.02);
   overflow: hidden;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .faq-item.active {
   border-color: var(--green);
-  box-shadow: 0 6px 18px rgba(47, 77, 51, 0.08);
+  box-shadow: 0 4px 12px rgba(47, 77, 51, 0.06);
 }
 
 .faq-question {
@@ -707,16 +715,16 @@
   background: none;
   border: none;
   text-align: left;
-  padding: 18px 22px;
+  padding: 13px 18px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
-  font-size: 15.5px;
+  font-size: 14.5px;
   color: var(--green-dark);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  gap: 16px;
+  gap: 14px;
   transition: color 0.15s ease;
 }
 
@@ -725,8 +733,8 @@
 }
 
 .faq-toggle-icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: var(--green-soft);
   position: relative;
@@ -745,14 +753,14 @@
 }
 
 .faq-toggle-icon::before {
-  width: 10px;
+  width: 9px;
   height: 2px;
   transform: translate(-50%, -50%);
 }
 
 .faq-toggle-icon::after {
   width: 2px;
-  height: 10px;
+  height: 9px;
   transform: translate(-50%, -50%);
 }
 
@@ -774,17 +782,17 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-  padding: 0 22px;
+  padding: 0 18px;
 }
 
 .faq-item.active .faq-answer {
   max-height: 320px;
-  padding: 0 22px 20px;
+  padding: 0 18px 14px;
 }
 
 .faq-answer p {
-  font-size: 14px;
-  line-height: 1.65;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: var(--text-gray);
   margin: 0;
 }
@@ -894,22 +902,40 @@ footer {
 }
 
 /* Tablet and mobile layout adjustments */
-@media (max-width: 1024px) {
-  .hero-content {
-    gap: 32px;
-    padding: 24px 28px;
-  }
-}
-
 @media (max-width: 900px) {
   .nav-inner {
-    padding: 14px 20px;
-    flex-wrap: wrap;
+    padding: 13px 18px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
     gap: 12px;
   }
 
+  .nav-inner .logo {
+    font-size: 19px;
+    gap: 7px;
+    flex-shrink: 0;
+  }
+
+  .nav-inner .logo-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav-inner nav {
+    margin-left: auto;
+  }
+
   .nav-inner nav ul {
-    gap: 18px;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    flex-wrap: nowrap;
+  }
+
+  .nav-inner nav a {
+    font-size: 13px;
+    white-space: nowrap;
   }
 
   .hero-section {
@@ -921,91 +947,504 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 28px 20px 24px;
+    padding: 22px 18px 20px;
     text-align: center;
-    gap: 24px;
+    gap: 18px;
     flex: 0 1 auto;
   }
 
   .hero-text-block {
     flex: 0 1 auto;
-    max-width: 600px;
+    max-width: 520px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 4px 11px;
+    margin-bottom: 10px;
   }
 
   .headline {
-    font-size: clamp(34px, 5.5vw, 48px);
-    margin-bottom: 12px;
+    font-size: clamp(28px, 6vw, 38px);
+    line-height: 1.15;
+    margin-bottom: 10px;
   }
 
   .hero-sub {
-    max-width: 100%;
-    font-size: 15.5px;
-    line-height: 1.55;
-    margin-bottom: 18px;
+    max-width: 440px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .feature-row {
     justify-content: center;
-    gap: 10px 12px;
+    gap: 8px 10px;
+  }
+
+  .feature-item {
+    font-size: 12px;
+    padding: 5px 12px;
+    gap: 6px;
+    border-radius: 20px;
+  }
+
+  .feature-item img {
+    width: 14px;
+    height: 14px;
   }
 
   .resident-login-card {
     width: 100%;
-    max-width: 420px;
-    padding: 26px 22px 22px;
-    border-radius: 16px;
-    margin-top: 4px;
+    max-width: 360px;
+    padding: 22px 20px 18px;
+    border-radius: 14px;
+    margin-top: 2px;
+    text-align: left;
+  }
+
+  .resident-card-brand {
+    margin-bottom: 12px;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .resident-card-title {
+    font-size: 18px;
+    margin-bottom: 2px;
+    text-align: center;
+  }
+
+  .resident-card-subtitle {
+    font-size: 12px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .resident-field-group {
+    margin-bottom: 11px;
+    text-align: left;
+  }
+
+  .resident-field-label {
+    font-size: 11.5px;
+    margin-bottom: 4px;
+    text-align: left;
+  }
+
+  .resident-field-input {
+    height: 38px;
+    font-size: 13px;
+    padding: 0 12px;
+    border-radius: 7px;
+    text-align: left;
+  }
+
+  .resident-row-between {
+    font-size: 11.5px;
+    margin-bottom: 12px;
+  }
+
+  .btn-resident-login-action {
+    height: 38px;
+    font-size: 13px;
+    border-radius: 7px;
+  }
+
+  .resident-login-bottom {
+    font-size: 12px;
+    margin-top: 10px;
+    text-align: center;
   }
 
   .scroll-down-container {
-    padding: 8px 20px 20px;
+    padding: 6px 16px 16px;
   }
 
-  .about-section {
-    padding: 60px 24px;
-    min-height: auto;
+  .scroll-text {
+    font-size: 11.5px;
   }
 
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .about-img {
-    max-width: 220px;
-    margin: 0 auto;
+  .scroll-arrow-circle {
+    width: 32px;
+    height: 32px;
   }
 
   .services-section {
-    padding: 45px 0;
+    padding: 36px 0 32px;
     min-height: auto;
   }
 
   .services-head {
-    padding: 0 20px;
-    margin-bottom: 18px;
+    padding: 0 16px;
+    margin-bottom: 14px;
+  }
+
+  .services-head-text h2 {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  .services-head-text p {
+    font-size: 12.5px;
+  }
+
+  .services-direction-indicator {
+    font-size: 11px;
   }
 
   .services-marquee-track {
-    gap: 16px;
-    animation-duration: 28s;
+    gap: 12px;
+    animation-duration: 26s;
   }
 
   .svc-card {
-    width: 280px;
-    min-width: 280px;
-    padding: 18px 18px 16px;
+    width: 250px;
+    min-width: 250px;
+    padding: 15px 15px 13px;
+    border-radius: 12px;
+  }
+
+  .svc-name {
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+
+  .svc-time {
+    font-size: 11.5px;
+    margin-bottom: 8px;
+  }
+
+  .svc-chips {
+    gap: 4px;
+  }
+
+  .chip {
+    font-size: 10.5px;
+    padding: 3px 7px;
   }
 
   .footer-inner {
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
   }
 
   .faq-section {
-    padding: 50px 20px;
+    padding: 32px 16px;
   }
 
   .faq-heading {
-    font-size: 26px;
+    font-size: 20px;
+  }
+
+  .faq-sub {
+    font-size: 12.5px;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-inner {
+    padding: 11px 14px;
+    gap: 8px;
+  }
+
+  .nav-inner .logo {
+    font-size: 17px;
+    gap: 6px;
+  }
+
+  .nav-inner .logo-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .nav-inner nav ul {
+    gap: 10px;
+  }
+
+  .nav-inner nav a {
+    font-size: 12px;
+  }
+
+  .hero-content {
+    padding: 16px 14px 16px;
+    gap: 14px;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    padding: 3px 9px;
+    margin-bottom: 8px;
+    border-radius: 14px;
+  }
+
+  .headline {
+    font-size: 24px;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .hero-sub {
+    font-size: 12.5px;
+    line-height: 1.45;
+    margin-bottom: 12px;
+    max-width: 320px;
+  }
+
+  .feature-row {
+    gap: 6px 8px;
+  }
+
+  .feature-item {
+    font-size: 10.5px;
+    padding: 4px 9px;
+    gap: 5px;
+    border-radius: 16px;
+  }
+
+  .feature-item img {
+    width: 12px;
+    height: 12px;
+  }
+
+  .resident-login-card {
+    max-width: 330px;
+    padding: 18px 14px 14px;
+    border-radius: 12px;
+    text-align: left;
+  }
+
+  .resident-card-brand {
+    margin-bottom: 8px;
+    gap: 5px;
+    justify-content: center;
+  }
+
+  .resident-logo-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .resident-brand-wordmark {
+    font-size: 13.5px;
+  }
+
+  .resident-card-title {
+    font-size: 16px;
+    margin-bottom: 2px;
+    text-align: center;
+  }
+
+  .resident-card-subtitle {
+    font-size: 11px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .resident-field-group {
+    margin-bottom: 9px;
+    text-align: left;
+  }
+
+  .resident-field-label {
+    font-size: 10.5px;
+    margin-bottom: 3px;
+    text-align: left;
+  }
+
+  .resident-field-input {
+    height: 35px;
+    font-size: 12px;
+    padding: 0 10px;
+    border-radius: 6px;
+    text-align: left;
+  }
+
+  .resident-toggle-password svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .resident-row-between {
+    font-size: 10.5px;
+    margin-bottom: 10px;
+  }
+
+  .btn-resident-login-action {
+    height: 35px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .resident-login-bottom {
+    font-size: 11px;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .scroll-down-container {
+    padding: 4px 12px 14px;
+  }
+
+  .scroll-text {
+    font-size: 10.5px;
+  }
+
+  .scroll-arrow-circle {
+    width: 28px;
+    height: 28px;
+  }
+
+  .scroll-arrow-circle svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .services-section {
+    padding: 28px 0 24px;
+  }
+
+  .services-head {
+    padding: 0 14px;
+    margin-bottom: 12px;
+  }
+
+  .services-head-text h2 {
+    font-size: 20px;
+  }
+
+  .services-head-text p {
+    font-size: 11.5px;
+  }
+
+  .services-direction-indicator {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .svc-card {
+    width: 220px;
+    min-width: 220px;
+    padding: 12px 12px 10px;
+    border-radius: 10px;
+  }
+
+  .svc-name {
+    font-size: 13px;
+  }
+
+  .svc-time {
+    font-size: 10.5px;
+    margin-bottom: 6px;
+  }
+
+  .chip {
+    font-size: 9.5px;
+    padding: 2px 6px;
+  }
+
+  .faq-section {
+    padding: 24px 12px;
+  }
+
+  .faq-heading {
+    font-size: 18px;
+  }
+
+  .faq-sub {
+    font-size: 11.5px;
+    margin-bottom: 12px;
+  }
+
+  .faq-accordion {
+    gap: 7px;
+  }
+
+  .faq-item {
+    border-radius: 7px;
+  }
+
+  .faq-question {
+    font-size: 12px;
+    padding: 9px 11px;
+    gap: 8px;
+  }
+
+  .faq-toggle-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .faq-item.active .faq-answer {
+    padding: 0 11px 9px;
+  }
+
+  .faq-answer p {
+    font-size: 11px;
+  }
+
+  footer {
+    padding: 24px 14px 14px;
+  }
+
+  .footer-inner {
+    gap: 16px;
+  }
+
+  .footer-brand p {
+    font-size: 14px;
+  }
+
+  .footer-brand .url a {
+    font-size: 11px;
+  }
+
+  .footer-nav h4,
+  .footer-contact h4 {
+    font-size: 10.5px;
+    margin-bottom: 6px;
+  }
+
+  .footer-nav ul {
+    gap: 4px;
+  }
+
+  .footer-nav a {
+    font-size: 11px;
+  }
+
+  .footer-contact .row {
+    font-size: 11px;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  .footer-contact img {
+    width: 13px;
+    height: 13px;
+  }
+
+  .footer-logo {
+    gap: 6px;
+  }
+
+  .footer-logo .logo-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .footer-logo .wordmark {
+    font-size: 14px;
+  }
+
+  .copyright {
+    font-size: 10px;
+    margin-top: 14px;
   }
 }

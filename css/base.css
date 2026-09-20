@@ -167,6 +167,58 @@ body {
   text-decoration: underline;
 }
 
+/* Loading Spinner Component and Button Feedback */
+@keyframes spinner-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  border-top-color: currentColor;
+  animation: spinner-rotate 0.65s linear infinite;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+.btn-loading {
+  position: relative !important;
+  color: transparent !important;
+  pointer-events: none !important;
+  cursor: wait !important;
+  user-select: none !important;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 50%;
+  left: 50%;
+  margin-top: -9px;
+  margin-left: -9px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spinner-rotate 0.65s linear infinite;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.btn-loading-dark::after {
+  border-color: rgba(36, 75, 49, 0.25);
+  border-top-color: #244b31;
+}
+
 /* Fade transition for auth panels if toggled */
 #loginPanel,
 #registerPanel {
